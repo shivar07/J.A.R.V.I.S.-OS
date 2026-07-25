@@ -1,3 +1,4 @@
+// render daily forecast forecasts loop
 // alert warning thresholds checks
 // queries open-meteo telemetry directly
 // restricted drag coordinates offset on boundary
