@@ -126,6 +126,8 @@ document.addEventListener("DOMContentLoaded", () => {
   
   initHUDSystem();
 
+  initWeather();
+  initHackatime();
   
   initBootSequence();
 });
@@ -1154,4 +1156,420 @@ function initHUDSystem() {
       tempBar.style.width = ((temp / 80) * 100) + "%";
     }
   }, 2000);
+}
+
+// --- Weather HUD Logic ---
+let defaultCity = "MALIBU, CA";
+let defaultLat = 34.02;
+let defaultLon = -118.77;
+
+function initWeather() {
+  const searchInput = document.getElementById("weather-city-input");
+  const searchBtn = document.getElementById("weather-search-btn");
+
+  if (searchBtn && searchInput) {
+    searchBtn.addEventListener("click", () => {
+      const city = searchInput.value.trim();
+      if (city) {
+        fetchWeatherByCity(city);
+      }
+    });
+    searchInput.addEventListener("keydown", (e) => {
+      if (e.key === "Enter") {
+        const city = searchInput.value.trim();
+        if (city) {
+          fetchWeatherByCity(city);
+        }
+      }
+    });
+  }
+
+  // Load default weather
+  fetchWeather(defaultLat, defaultLon, defaultCity);
+}
+
+function fetchWeatherByCity(cityName) {
+  const loader = document.getElementById("weather-loader");
+  const results = document.getElementById("weather-results");
+  if (loader && results) {
+    loader.style.display = "block";
+    results.style.display = "none";
+  }
+
+  fetch(`https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(cityName)}&count=1&language=en&format=json`)
+    .then(res => res.json())
+    .then(data => {
+      if (data.results && data.results.length > 0) {
+        const result = data.results[0];
+        const lat = result.latitude;
+        const lon = result.longitude;
+        const name = `${result.name.toUpperCase()}, ${result.country_code.toUpperCase()}`;
+        fetchWeather(lat, lon, name);
+      } else {
+        alert("City not found. Please try another query.");
+        if (loader && results) {
+          loader.style.display = "none";
+          results.style.display = "block";
+        }
+      }
+    })
+    .catch(err => {
+      console.error("Geocoding error:", err);
+      if (loader && results) {
+        loader.style.display = "none";
+        results.style.display = "block";
+      }
+    });
+}
+
+function fetchWeather(lat, lon, displayCity) {
+  const tempEl = document.getElementById("weather-temp");
+  const feelsEl = document.getElementById("weather-feels");
+  const windEl = document.getElementById("weather-wind");
+  const windDirEl = document.getElementById("weather-wind-dir");
+  const humidityEl = document.getElementById("weather-humidity");
+  const precipEl = document.getElementById("weather-precip");
+  const pressureEl = document.getElementById("weather-pressure");
+  const pressureLabelEl = document.getElementById("weather-pressure-label");
+  const cityEl = document.getElementById("weather-display-city");
+  const coordsEl = document.getElementById("weather-display-coords");
+  const statusAlertEl = document.getElementById("weather-status-alert");
+  const forecastGrid = document.getElementById("weather-forecast-grid");
+  const summaryText = document.getElementById("weather-summary-text");
+  
+  const tbTemp = document.getElementById("taskbar-weather-temp");
+  const tbDesc = document.getElementById("taskbar-weather-desc");
+
+  const loader = document.getElementById("weather-loader");
+  const results = document.getElementById("weather-results");
+
+  fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=temperature_2m,relative_humidity_2m,apparent_temperature,precipitation,weather_code,pressure_msl,wind_speed_10m,wind_direction_10m&daily=weather_code,temperature_2m_max,temperature_2m_min&timezone=auto`)
+    .then(res => res.json())
+    .then(data => {
+      if (loader && results) {
+        loader.style.display = "none";
+        results.style.display = "block";
+      }
+
+      const current = data.current;
+      if (!current) return;
+
+      // Update basic fields
+      if (cityEl) cityEl.textContent = displayCity;
+      if (coordsEl) coordsEl.textContent = `LAT: ${lat.toFixed(2)}° N / LON: ${Math.abs(lon).toFixed(2)}° ${lon >= 0 ? 'E' : 'W'}`;
+      if (tempEl) tempEl.textContent = `${current.temperature_2m.toFixed(1)}°C`;
+      if (feelsEl) feelsEl.textContent = `FEELS: ${Math.round(current.apparent_temperature)}°C`;
+      if (windEl) windEl.textContent = `${current.wind_speed_10m.toFixed(1)} km/h`;
+      if (windDirEl) windDirEl.textContent = `BEARING: ${current.wind_direction_10m}°`;
+      if (humidityEl) humidityEl.textContent = `${current.relative_humidity_2m}%`;
+      if (precipEl) precipEl.textContent = `RAIN: ${current.precipitation.toFixed(1)}mm`;
+      if (pressureEl) pressureEl.textContent = `${Math.round(current.pressure_msl)} hPa`;
+
+      // Status labels & alerts
+      let condition = "Clear";
+      let isOptimal = true;
+      const code = current.weather_code;
+      if (code === 0) condition = "Clear";
+      else if (code <= 3) condition = "Cloudy";
+      else if (code === 45 || code === 48) { condition = "Foggy"; isOptimal = false; }
+      else if (code <= 55) { condition = "Drizzle"; isOptimal = false; }
+      else if (code <= 65) { condition = "Rainy"; isOptimal = false; }
+      else if (code <= 75) { condition = "Snowy"; isOptimal = false; }
+      else if (code <= 82) { condition = "Showers"; isOptimal = false; }
+      else { condition = "Stormy"; isOptimal = false; }
+
+      if (statusAlertEl) {
+        statusAlertEl.textContent = isOptimal ? "OPTIMAL" : "WARNING";
+        statusAlertEl.style.background = isOptimal ? "rgba(39, 201, 63, 0.15)" : "rgba(255, 47, 142, 0.15)";
+        statusAlertEl.style.borderColor = isOptimal ? "#27c93f" : "#ff2f8e";
+        statusAlertEl.style.color = isOptimal ? "#27c93f" : "#ff2f8e";
+      }
+
+      if (pressureLabelEl) {
+        pressureLabelEl.textContent = current.pressure_msl > 1013 ? "HIGH" : "NORMAL";
+      }
+
+      if (tbTemp) tbTemp.textContent = `${current.temperature_2m.toFixed(1)}°C`;
+      if (tbDesc) tbDesc.textContent = `${displayCity.split(',')[0]} (${condition})`;
+
+      if (summaryText) {
+        summaryText.textContent = isOptimal 
+          ? `J.A.R.V.I.S. ANALYSIS: Clear flight corridors. Altitude envelope is safe for supersonic repulsor testing.` 
+          : `J.A.R.V.I.S. WARNING: Adverse flight telemetry. Precipitation or fog hazard detected. Repulsor flight tests restricted.`;
+      }
+
+      // 5-Day Forecast Grid
+      if (forecastGrid && data.daily) {
+        forecastGrid.innerHTML = "";
+        const weekdays = ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"];
+        const todayIdx = new Date().getDay();
+        
+        for (let i = 0; i < 5; i++) {
+          const maxT = data.daily.temperature_2m_max[i];
+          const minT = data.daily.temperature_2m_min[i];
+          const dayCode = data.daily.weather_code[i];
+          const dayName = weekdays[(todayIdx + i) % 7];
+          
+          let icon = "☀️";
+          if (dayCode > 0 && dayCode <= 3) icon = "⛅";
+          else if (dayCode === 45 || dayCode === 48) icon = "🌫️";
+          else if (dayCode > 48 && dayCode <= 65) icon = "🌧️";
+          else if (dayCode > 65 && dayCode <= 75) icon = "❄️";
+          else if (dayCode > 75 && dayCode <= 82) icon = "🌦️";
+          else icon = "⛈️";
+
+          const card = document.createElement("div");
+          card.style.background = "rgba(255, 255, 255, 0.03)";
+          card.style.border = "1px solid rgba(79, 216, 232, 0.1)";
+          card.style.borderRadius = "4px";
+          card.style.padding = "6px 2px";
+          card.style.textAlign = "center";
+          card.style.display = "flex";
+          card.style.flexDirection = "column";
+          card.style.alignItems = "center";
+          card.style.justifyContent = "space-between";
+
+          card.innerHTML = `
+            <div style="font-family: var(--font-mono); font-size: 7px; color: var(--text-dim);">${dayName}</div>
+            <div style="font-size: 14px; margin: 3px 0;">${icon}</div>
+            <div style="font-family: var(--font-hud); font-size: 8px; color: #ffffff; font-weight: bold;">${Math.round(maxT)}°/${Math.round(minT)}°</div>
+          `;
+          forecastGrid.appendChild(card);
+        }
+      }
+    })
+    .catch(err => {
+      console.error("Error loading weather data:", err);
+    });
+}
+
+// --- Hackatime Integration Logic ---
+let leaderboardEntries = [];
+let activeScope = "global";
+
+function openHackatimeWorkspace() {
+  toggleWindow('win-hackatime-stats');
+}
+
+function initHackatime() {
+  const statsLoader = document.getElementById("hack-stats-loader");
+  const statsContent = document.getElementById("hack-stats-content");
+
+  // 1. Fetch Stats
+  fetch("http://localhost:3001/api/stats")
+    .then(res => res.json())
+    .then(data => {
+      if (statsLoader) statsLoader.style.display = "none";
+      if (statsContent) statsContent.style.display = "block";
+
+      const profile = data.profile || {};
+      const dashboard = data.dashboard_stats?.filterable_dashboard_data || {};
+
+      // Profile details
+      const avatarEl = document.getElementById("hack-avatar");
+      if (avatarEl && profile.avatar_url) avatarEl.src = profile.avatar_url;
+
+      const nameEl = document.getElementById("hack-display-name");
+      if (nameEl) nameEl.textContent = profile.display_name || "shivar07";
+
+      const streakEl = document.getElementById("hack-streak-days");
+      if (streakEl) streakEl.textContent = `${profile.streak_days || 0} days`;
+
+      // KPI dashboard metrics
+      const totalTimeEl = document.getElementById("hack-total-time");
+      if (totalTimeEl && dashboard.total_time) {
+        const hrs = Math.floor(dashboard.total_time / 3600);
+        const mins = Math.floor((dashboard.total_time % 3600) / 60);
+        totalTimeEl.textContent = `${hrs}h ${mins}m`;
+      }
+
+      const topProjectEl = document.getElementById("hack-top-project");
+      if (topProjectEl) topProjectEl.textContent = dashboard.top_project || "--";
+
+      const topLangEl = document.getElementById("hack-top-language");
+      if (topLangEl) topLangEl.textContent = dashboard.top_language || "--";
+
+      // Today log description
+      const todayLogEl = document.getElementById("hack-today-log");
+      if (todayLogEl) {
+        const todayHrs = Math.floor((dashboard.total_time || 0) / 3600);
+        const todayMins = Math.floor(((dashboard.total_time || 0) % 3600) / 60);
+        todayLogEl.textContent = `Overall, you've logged ${todayHrs}h ${todayMins}m across HTML, CSS, JavaScript, and Arduino configurations using Antigravity-ide.`;
+      }
+
+      // Projects chart bars
+      const projectsGrid = document.getElementById("hack-projects-bars");
+      if (projectsGrid && dashboard.project_durations) {
+        projectsGrid.innerHTML = "";
+        const maxSecs = Math.max(...Object.values(dashboard.project_durations), 1);
+        
+        Object.entries(dashboard.project_durations).forEach(([proj, secs]) => {
+          if (secs === 0) return;
+          const percentage = (secs / maxSecs) * 100;
+          const h = Math.floor(secs / 3600);
+          const m = Math.floor((secs % 3600) / 60);
+
+          const barWrapper = document.createElement("div");
+          barWrapper.className = "chart-bar-wrapper";
+          barWrapper.style.marginBottom = "8px";
+          barWrapper.innerHTML = `
+            <div style="display: flex; justify-content: space-between; font-size: 8px; font-family: var(--font-mono); color: var(--text-main); margin-bottom: 2px;">
+              <span>${proj.toUpperCase()}</span>
+              <span>${h}H ${m}M</span>
+            </div>
+            <div style="background: rgba(255,255,255,0.05); height: 8px; border-radius: 4px; overflow: hidden; border: 1px solid rgba(79, 216, 232, 0.15);">
+              <div style="background: linear-gradient(90deg, #4fd8e8, #00f0ff); width: ${percentage}%; height: 100%; box-shadow: 0 0 8px #4fd8e8;"></div>
+            </div>
+          `;
+          projectsGrid.appendChild(barWrapper);
+        });
+      }
+
+      // Languages chart bars
+      const languagesGrid = document.getElementById("hack-languages-bars");
+      if (languagesGrid && dashboard.language_stats) {
+        languagesGrid.innerHTML = "";
+        const maxSecs = Math.max(...Object.values(dashboard.language_stats), 1);
+        
+        Object.entries(dashboard.language_stats).forEach(([lang, secs]) => {
+          if (secs === 0) return;
+          const percentage = (secs / maxSecs) * 100;
+          const h = Math.floor(secs / 3600);
+          const m = Math.floor((secs % 3600) / 60);
+
+          const barWrapper = document.createElement("div");
+          barWrapper.className = "chart-bar-wrapper";
+          barWrapper.style.marginBottom = "8px";
+          barWrapper.innerHTML = `
+            <div style="display: flex; justify-content: space-between; font-size: 8px; font-family: var(--font-mono); color: var(--text-main); margin-bottom: 2px;">
+              <span>${lang.toUpperCase()}</span>
+              <span>${h}H ${m}M</span>
+            </div>
+            <div style="background: rgba(255,255,255,0.05); height: 8px; border-radius: 4px; overflow: hidden; border: 1px solid rgba(255, 47, 142, 0.15);">
+              <div style="background: linear-gradient(90deg, #ff2f8e, #ff007f); width: ${percentage}%; height: 100%; box-shadow: 0 0 8px #ff2f8e;"></div>
+            </div>
+          `;
+          languagesGrid.appendChild(barWrapper);
+        });
+      }
+    })
+    .catch(err => {
+      console.error("Error loading Hackatime stats:", err);
+      if (statsLoader) statsLoader.textContent = "Offline or proxy disconnected.";
+    });
+
+  // 2. Fetch Leaderboard
+  const lbLoader = document.getElementById("hack-lb-loader");
+  const lbTable = document.getElementById("hack-lb-table");
+
+  fetch("http://localhost:3001/api/leaderboard")
+    .then(res => res.json())
+    .then(data => {
+      if (lbLoader) lbLoader.style.display = "none";
+      if (lbTable) lbTable.style.display = "table";
+
+      const entriesData = data.props?.entries?.entries || [];
+      leaderboardEntries = entriesData;
+      renderLeaderboard();
+    })
+    .catch(err => {
+      console.error("Error loading Leaderboard:", err);
+      if (lbLoader) lbLoader.textContent = "Offline or proxy disconnected.";
+    });
+
+  // Hook filters
+  const scopeGlobal = document.getElementById("lb-scope-global");
+  const scopeIndia = document.getElementById("lb-scope-india");
+  const searchInput = document.getElementById("lb-search-input");
+
+  if (scopeGlobal) {
+    scopeGlobal.addEventListener("click", () => {
+      scopeGlobal.classList.add("active");
+      if (scopeIndia) scopeIndia.classList.remove("active");
+      activeScope = "global";
+      renderLeaderboard();
+    });
+  }
+
+  if (scopeIndia) {
+    scopeIndia.addEventListener("click", () => {
+      scopeIndia.classList.add("active");
+      if (scopeGlobal) scopeGlobal.classList.remove("active");
+      activeScope = "india";
+      renderLeaderboard();
+    });
+  }
+
+  if (searchInput) {
+    searchInput.addEventListener("input", () => {
+      renderLeaderboard();
+    });
+  }
+}
+
+function renderLeaderboard() {
+  const tbody = document.getElementById("hack-lb-tbody");
+  const searchInput = document.getElementById("lb-search-input");
+  if (!tbody) return;
+
+  tbody.innerHTML = "";
+
+  const query = searchInput ? searchInput.value.toLowerCase().trim() : "";
+
+  // Filter list
+  let filtered = leaderboardEntries;
+  
+  // Filter country scope
+  if (activeScope === "india") {
+    filtered = filtered.filter(entry => entry.user?.country_code === "IN");
+  }
+
+  // Filter search
+  if (query) {
+    filtered = filtered.filter(entry => entry.user?.display_name?.toLowerCase().includes(query));
+  }
+
+  const displayList = filtered.slice(0, 100);
+
+  if (displayList.length === 0) {
+    tbody.innerHTML = `<tr><td colspan="4" style="text-align: center; color: var(--text-dim); font-size: 10px; font-family: var(--font-mono); padding: 20px;">NO TELEMETRY NODES FOUND</td></tr>`;
+    return;
+  }
+
+  displayList.forEach((entry, idx) => {
+    const isMe = entry.user?.display_name === "shivar07";
+    const userAvatar = entry.user?.avatar_url || "image/me.png";
+    const userName = entry.user?.display_name || "Anonymous";
+    const country = entry.user?.country_code || "UN";
+    const streak = entry.streak_count || 0;
+    
+    const h = Math.floor(entry.total_seconds / 3600);
+    const m = Math.floor((entry.total_seconds % 3600) / 60);
+    const timeStr = `${h}h ${m}m`;
+
+    const tr = document.createElement("tr");
+    if (isMe) {
+      tr.style.background = "rgba(79, 216, 232, 0.12)";
+      tr.style.borderLeft = "3px solid var(--primary)";
+    }
+
+    let rankText = `${idx + 1}`;
+    if (idx === 0) rankText = "🥇 1";
+    else if (idx === 1) rankText = "🥈 2";
+    else if (idx === 2) rankText = "🥉 3";
+
+    tr.innerHTML = `
+      <td style="text-align: center; font-weight: bold; font-family: var(--font-hud); color: ${isMe ? 'var(--primary)' : 'inherit'};">${rankText}</td>
+      <td>
+        <div style="display: flex; align-items: center; gap: 8px;">
+          <img src="${userAvatar}" style="width: 18px; height: 18px; border-radius: 50%; border: 1px solid rgba(255,255,255,0.15);" onerror="this.src='image/me.png'">
+          <span style="font-weight: 500; font-family: var(--font-ui);">${userName}</span>
+          <span style="font-size: 8px; opacity: 0.6; font-family: var(--font-mono);">[${country}]</span>
+        </div>
+      </td>
+      <td style="text-align: center; font-family: var(--font-mono); font-size: 10px;">${streak} 🔥</td>
+      <td style="text-align: right; font-family: var(--font-hud); font-weight: bold; font-size: 10px; color: var(--primary);">${timeStr}</td>
+    `;
+    tbody.appendChild(tr);
+  });
 }
