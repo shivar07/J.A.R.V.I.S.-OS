@@ -7,6 +7,15 @@
   <title>RoboOS - Robotic Engineer Command Center</title>
   <meta name="description" content="A futuristic, glassmorphic sci-fi web operating system for robotics.">
   <link rel="stylesheet" href="style.css">
+  <script>
+    window.onerror = function(message, source, lineno, colno, error) {
+      alert("RUNTIME ERROR:\n" + message + "\n\nSource: " + source + "\nLine: " + lineno + "\nCol: " + colno);
+      return false;
+    };
+    window.addEventListener('unhandledrejection', function(event) {
+      alert("UNHANDLED PROMISE REJECTION:\n" + event.reason);
+    });
+  </script>
 </head>
 
 <body>

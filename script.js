@@ -132,27 +132,27 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
 function initClock() {
-  const clockEl = document.getElementById("system-clock");
+  const clockTime = document.getElementById("taskbar-clock-time");
+  const clockDate = document.getElementById("taskbar-clock-date");
   const update = () => {
     const now = new Date();
-    const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
-    const months = ['Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec', 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'];
-    
-    const monthIndex = now.getMonth();
-    const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-    
-    const dayName = days[now.getDay()];
-    const monthName = monthNames[monthIndex];
-    const date = now.getDate();
     
     let hrs = now.getHours();
-    const ampm = hrs >= 12 ? 'AM' : 'PM'; 
-    const ampmText = hrs >= 12 ? 'PM' : 'AM';
+    const ampm = hrs >= 12 ? 'PM' : 'AM';
     hrs = hrs % 12;
     hrs = hrs ? hrs : 12;
     const mins = String(now.getMinutes()).padStart(2, '0');
     
-    clockEl.textContent = `${dayName}, ${monthName} ${date}  ${hrs}:${mins} ${ampmText}`;
+    if (clockTime) {
+      clockTime.textContent = `${hrs}:${mins} ${ampm}`;
+    }
+    
+    if (clockDate) {
+      const day = String(now.getDate()).padStart(2, '0');
+      const month = String(now.getMonth() + 1).padStart(2, '0');
+      const year = now.getFullYear();
+      clockDate.textContent = `${day}/${month}/${year}`;
+    }
   };
   update();
   setInterval(update, 1000);
