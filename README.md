@@ -1,6 +1,6 @@
-# Sujay Patel — Interactive WebOS Portfolio
+# shivar07 — Interactive WebOS Portfolio
 
-I am a Robotics & Automation student at Government Polytechnic, Ahmedabad. This is my developer portfolio themed as an interactive engineering HUD & personal WebOS inspired by Stark Industries and JARVIS.
+I am a developer and robotics student building an interactive engineering HUD & personal WebOS inspired by Stark Industries and JARVIS.
 
 GitHub: https://github.com/shivar07/J.A.R.V.I.S.-OS.git
 
