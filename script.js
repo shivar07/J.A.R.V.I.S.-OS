@@ -1624,11 +1624,11 @@ function renderLeaderboard() {
 
   const query = searchInput ? searchInput.value.toLowerCase().trim() : "";
 
-  // Filter list
-  let filtered = [...leaderboardEntries];
+  // 1. Establish true global ranks across the entire dataset first
+  let globalList = [...leaderboardEntries];
   
   // Inject myself dynamically if not already in the array
-  const meExists = filtered.some(entry => entry.user?.display_name?.toLowerCase() === "shivar07" || entry.user?.display_name?.toLowerCase() === "sujay");
+  const meExists = globalList.some(entry => entry.user?.display_name?.toLowerCase() === "shivar07" || entry.user?.display_name?.toLowerCase() === "sujay");
   if (!meExists && myHackatimeStats) {
     const profile = myHackatimeStats.profile || {};
     const dashboard = myHackatimeStats.dashboard_stats?.filterable_dashboard_data || {};
@@ -1641,21 +1641,25 @@ function renderLeaderboard() {
       streak_count: profile.streak_days || 2,
       total_seconds: dashboard.total_time || 53280
     };
-    filtered.push(myEntry);
+    globalList.push(myEntry);
   }
 
-  // Filter country scope
+  // Sort global list descending by total_seconds to compute true rank
+  globalList.sort((a, b) => b.total_seconds - a.total_seconds);
+  globalList.forEach((entry, i) => {
+    entry.trueRank = i + 1;
+  });
+
+  // 2. Filter by scope and search query
+  let filtered = globalList;
+
   if (activeScope === "india") {
     filtered = filtered.filter(entry => entry.user?.country_code === "IN");
   }
 
-  // Filter search
   if (query) {
     filtered = filtered.filter(entry => entry.user?.display_name?.toLowerCase().includes(query));
   }
-
-  // Always re-sort the filtered list descending by seconds to establish correct rank
-  filtered.sort((a, b) => b.total_seconds - a.total_seconds);
 
   const displayList = filtered.slice(0, 100);
 
@@ -1664,7 +1668,7 @@ function renderLeaderboard() {
     return;
   }
 
-  displayList.forEach((entry, idx) => {
+  displayList.forEach((entry) => {
     const isMe = entry.user?.display_name?.toLowerCase() === "shivar07" || entry.user?.display_name?.toLowerCase() === "sujay";
     const userAvatar = entry.user?.avatar_url || "image/me.png";
     const userName = entry.user?.display_name || "Anonymous";
@@ -1682,10 +1686,11 @@ function renderLeaderboard() {
       tr.style.boxShadow = "inset 0 0 8px rgba(255, 47, 142, 0.25)";
     }
 
-    let rankText = `${idx + 1}`;
-    if (idx === 0) rankText = "🥇 1";
-    else if (idx === 1) rankText = "🥈 2";
-    else if (idx === 2) rankText = "🥉 3";
+    const rank = entry.trueRank;
+    let rankText = `${rank}`;
+    if (rank === 1) rankText = "🥇 1";
+    else if (rank === 2) rankText = "🥈 2";
+    else if (rank === 3) rankText = "🥉 3";
 
     tr.innerHTML = `
       <td style="text-align: center; font-weight: bold; font-family: var(--font-hud); color: ${isMe ? 'var(--primary)' : 'inherit'};">${rankText}</td>
