@@ -128,6 +128,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
   initWeather();
   initHackatime();
+  initMusicPromptHandlers();
+  initMusicPlayer();
   
   initBootSequence();
 });
@@ -465,6 +467,87 @@ function initYouTubeLab() {
 }
 
 
+const biosLines = [
+  "Stark Industries Kernel 6.9.0-jarvis-amd64 (SMP) #1 SMP PREEMPT_DYNAMIC Mon Jul 20 18:24:50 UTC 2026",
+  "Command line: BOOT_IMAGE=/vmlinuz-6.9.0-jarvis root=UUID=stark-core-uuid ro quiet splash",
+  "x86/fpu: Supporting XSAVE feature 0x001: 'x87 floating point registers'",
+  "Signal-based Arc Reactor subsystem detected. Frequency scaling activated.",
+  "Vibranium shielding kernel extensions ........ loaded successfully.",
+  "ACPI: Core revision 20260318",
+  "Virtual Disk /dev/sda1: 2.0 TB SCSI Drive detected.",
+  "Journald service [ OK ] listening on security interrupts.",
+  "Mounted filesystem /root/core (ext4) successfully.",
+  "[    0.000000] Linux version 6.9.0-jarvis (gcc version 13.2.0)",
+  "[    0.000215] BIOS-provided physical RAM map:",
+  "[    0.000540] BIOS-e820: [mem 0x0000000000000000-0x000000000009ffff] usable",
+  "[    0.001083] Memory: 65536MB available (16384K kernel code, 2304K rwdata, 8292K rodata)",
+  "[    0.002441] CPU: 16 processors active (Stark Arc-Core v17.5)",
+  "[    0.024182] Initializing display adapter: Holographic HUD Renderer 4.0 [OK]",
+  "[    0.040203] ACPI: 1 ACPI AML tables successfully acquired and loaded",
+  "[    0.067441] SCSI subsystem initialized",
+  "[    0.088092] usbcore: registered new interface driver usbfs",
+  "[    0.094218] pci 0000:00:02.0: vgaarb: setting as boot VGA device",
+  "[    0.112450] Console: switching to colour frame buffer device 240x60",
+  "[    0.154210] J.A.R.V.I.S. Neural Bridge link established on port 9001.",
+  "Starting systemd initialization...",
+  "[  OK  ] Created slice User Slices.",
+  "[  OK  ] Started Dispatch Password Requests to Console Directory.",
+  "[  OK  ] Reached target Path Units.",
+  "[  OK  ] Reached target Basic System.",
+  "Starting Jarvis Speech Core Services...",
+  "[  OK  ] Started jarvis-speech-core.service.",
+  "Starting Telemetry and Network Monitor..."
+];
+
+function runBiosBoot(callback) {
+  const biosScreen = document.getElementById("bios-boot-screen");
+  const consoleEl = document.getElementById("linux-console");
+  const bootScreen = document.getElementById("boot-screen");
+  
+  if (!biosScreen || !consoleEl) {
+    if (callback) callback();
+    return;
+  }
+  
+  biosScreen.style.display = "block";
+  if (bootScreen) bootScreen.style.display = "none";
+  consoleEl.innerHTML = "";
+  
+  let lineIndex = 0;
+  
+  function printNextLine() {
+    if (lineIndex < biosLines.length) {
+      const line = document.createElement("div");
+      const lineText = biosLines[lineIndex];
+      
+      if (lineText.includes("[  OK  ]") || lineText.includes("[OK]")) {
+        line.innerHTML = lineText.replace("[  OK  ]", "<span style='color: #27c93f; font-weight: bold;'>[  OK  ]</span>")
+                                 .replace("[OK]", "<span style='color: #27c93f; font-weight: bold;'>[OK]</span>");
+      } else if (lineText.includes("Kernel") || lineText.includes("Starting")) {
+        line.innerHTML = `<span style='color: var(--primary); font-weight: bold;'>${lineText}</span>`;
+      } else {
+        line.textContent = lineText;
+      }
+      
+      consoleEl.appendChild(line);
+      consoleEl.scrollTop = consoleEl.scrollHeight;
+      
+      lineIndex++;
+      setTimeout(printNextLine, 35 + Math.random() * 40);
+    } else {
+      setTimeout(() => {
+        biosScreen.style.display = "none";
+        if (bootScreen) {
+          bootScreen.style.display = "flex";
+        }
+        if (callback) callback();
+      }, 800);
+    }
+  }
+  
+  setTimeout(printNextLine, 200);
+}
+
 function initBootSequence() {
   const bootScreen = document.getElementById("boot-screen");
   const loginScreen = document.getElementById("login-screen");
@@ -472,6 +555,9 @@ function initBootSequence() {
   const bootStatusText = document.getElementById("boot-status-text");
   const bootProgress = document.getElementById("boot-progress");
   
+  if (bootStatusText) bootStatusText.style.display = "block";
+  if (bootProgress) bootProgress.style.display = "block";
+
   const bootSteps = [
     { progress: 15, text: "LOADING DEVICE HARDWARE PINS..." },
     { progress: 30, text: "INITIALIZING SPEECH CO-PILOT COEFFICIENTS..." },
@@ -486,29 +572,29 @@ function initBootSequence() {
   function runNextBootStep() {
     if (currentStep < bootSteps.length) {
       const step = bootSteps[currentStep];
-      bootProgress.style.width = step.progress + "%";
-      bootStatusText.textContent = step.text;
+      if (bootProgress) bootProgress.style.width = step.progress + "%";
+      if (bootStatusText) bootStatusText.textContent = step.text;
       
       if (typeof synthSound === "function") {
         synthSound("click");
       }
       
       currentStep++;
-      
       setTimeout(runNextBootStep, 80 + Math.random() * 50);
     } else {
       setTimeout(() => {
-        bootScreen.style.opacity = "0";
+        if (bootScreen) bootScreen.style.opacity = "0";
         setTimeout(() => {
-          bootScreen.style.display = "none";
-          loginScreen.style.display = "flex";
-          loginScreen.style.opacity = "1";
+          if (bootScreen) bootScreen.style.display = "none";
+          if (loginScreen) {
+            loginScreen.style.display = "flex";
+            loginScreen.style.opacity = "1";
+          }
         }, 500);
       }, 300);
     }
   }
 
-  
   const loginBtn = document.getElementById("login-signin-btn");
   if (loginBtn) {
     loginBtn.addEventListener("click", () => {
@@ -517,29 +603,29 @@ function initBootSequence() {
       }
       loginScreen.style.opacity = "0";
       
-      
       if (desktopArea) {
         desktopArea.style.display = "block";
         setTimeout(() => {
           desktopArea.style.opacity = "1";
+          triggerStartupWelcome();
         }, 50);
       }
       
       setTimeout(() => {
         loginScreen.style.display = "none";
-        triggerTerminalBootLogs();
       }, 800);
     });
   }
 
-  
   window.addEventListener("keydown", (e) => {
     if (loginScreen && loginScreen.style.display === "flex" && e.key === "Enter") {
       if (loginBtn) loginBtn.click();
     }
   });
 
-  setTimeout(runNextBootStep, 300);
+  runBiosBoot(() => {
+    setTimeout(runNextBootStep, 300);
+  });
 }
 
 
@@ -1572,4 +1658,267 @@ function renderLeaderboard() {
     `;
     tbody.appendChild(tr);
   });
+}
+
+// --- J.A.R.V.I.S. Welcome Sequence & Audio Decrypter Matrix ---
+const musicTracks = [
+  { title: "Iron Man", desc: "AC/DC - Iron Man", file: "music/Iron_Man.m4a", img: "image/me.png" },
+  { title: "Back In Black", desc: "AC/DC - Back In Black", file: "music/Back_In_Black.m4a", img: "image/me.png" },
+  { title: "Shoot To Thrill", desc: "AC/DC - Shoot To Thrill", file: "music/Shoot_to_Thrill.m4a", img: "image/me.png" },
+  { title: "Driving With The Top Down", desc: "Ramin Djawadi - Iron Man OST", file: "music/Driving_With_The_Top_Down.m4a", img: "image/me.png" }
+];
+
+let currentTrackIndex = 0;
+let isPlaying = false;
+
+function triggerStartupWelcome() {
+  // Open the Weather HUD window
+  toggleWindow('win-weather');
+
+  setTimeout(() => {
+    const tempVal = document.getElementById("weather-temp")?.textContent || "24.5 degrees";
+    const cityVal = document.getElementById("weather-display-city")?.textContent || "Malibu";
+    const conditionVal = document.getElementById("taskbar-weather-desc")?.textContent?.split('(')[1]?.replace(')', '') || "Clear";
+    
+    const welcomeText = `Welcome sir. The current temperature in ${cityVal} is ${tempVal}, with ${conditionVal} conditions. System telemetry is stable.`;
+    
+    if (typeof jarvisSpeak === "function") {
+      jarvisSpeak(welcomeText, () => {
+        showMusicPrompt();
+      });
+    } else {
+      showMusicPrompt();
+    }
+  }, 1000);
+}
+
+function showMusicPrompt() {
+  const promptOverlay = document.getElementById("jarvis-music-prompt");
+  if (promptOverlay) {
+    promptOverlay.style.display = "flex";
+  }
+}
+
+function initMusicPromptHandlers() {
+  const yesBtn = document.getElementById("jarvis-prompt-yes");
+  const noBtn = document.getElementById("jarvis-prompt-no");
+  const promptOverlay = document.getElementById("jarvis-music-prompt");
+
+  if (yesBtn) {
+    yesBtn.addEventListener("click", () => {
+      if (promptOverlay) promptOverlay.style.display = "none";
+      if (typeof synthSound === "function") synthSound("success");
+      
+      // Arrange 3 windows layout
+      // Music window at the top center
+      openWindowAt("win-music", "40px", "calc(50% - 305px)", "610px", "350px");
+      
+      // Design Hub (Gallery) on the right side
+      openWindowAt("win-gallery", "40px", "calc(100% - 640px)", "620px", "82vh");
+      
+      // Terminal on the left side (and print boot logs!)
+      openWindowAt("win-terminal", "40px", "20px", "620px", "82vh");
+      triggerTerminalBootLogs();
+
+      // Start playing music!
+      playFirstTrack();
+    });
+  }
+
+  if (noBtn) {
+    noBtn.addEventListener("click", () => {
+      if (promptOverlay) promptOverlay.style.display = "none";
+      if (typeof synthSound === "function") synthSound("click");
+    });
+  }
+}
+
+function openWindowAt(winId, top, left, width, height) {
+  const win = document.getElementById(winId);
+  const indicator = document.getElementById(`indicator-${winId}`);
+  const dockItem = indicator ? indicator.parentElement : null;
+
+  if (win) {
+    win.style.display = "flex";
+    win.style.top = top;
+    win.style.left = left;
+    if (width) win.style.width = width;
+    if (height) win.style.height = height;
+    
+    if (dockItem) dockItem.classList.add("app-open");
+    focusWindow(win);
+  }
+}
+
+function initMusicPlayer() {
+  const audio = document.getElementById("stark-audio-player");
+  const playBtn = document.getElementById("music-play-btn");
+  const prevBtn = document.getElementById("music-prev-btn");
+  const nextBtn = document.getElementById("music-next-btn");
+  const volSlider = document.getElementById("music-volume-slider");
+  const progSlider = document.getElementById("music-progress-slider");
+  const currTimeEl = document.getElementById("music-curr-time");
+  const totalTimeEl = document.getElementById("music-total-time");
+  const playlistContainer = document.getElementById("music-playlist-container");
+
+  if (!audio) return;
+
+  // Render Playlist
+  if (playlistContainer) {
+    playlistContainer.innerHTML = "";
+    musicTracks.forEach((track, idx) => {
+      const item = document.createElement("div");
+      item.className = `music-playlist-item ${idx === currentTrackIndex ? 'active' : ''}`;
+      item.style.padding = "6px 10px";
+      item.style.background = "rgba(255, 255, 255, 0.02)";
+      item.style.border = "1px solid rgba(79, 216, 232, 0.1)";
+      item.style.borderRadius = "4px";
+      item.style.cursor = "pointer";
+      item.style.display = "flex";
+      item.style.justifyContent = "space-between";
+      item.style.alignItems = "center";
+      item.style.transition = "all 0.2s";
+
+      item.innerHTML = `
+        <div style="display: flex; flex-direction: column;">
+          <span style="font-family: var(--font-hud); font-size: 11px; color: #ffffff;">${track.title}</span>
+          <span style="font-family: var(--font-mono); font-size: 8px; color: var(--text-dim);">${track.desc}</span>
+        </div>
+        <span style="font-size: 10px; color: var(--primary);">▶</span>
+      `;
+
+      item.addEventListener("click", () => {
+        loadAndPlayTrack(idx);
+      });
+
+      playlistContainer.appendChild(item);
+    });
+  }
+
+  if (playBtn) {
+    playBtn.addEventListener("click", () => {
+      togglePlayState();
+    });
+  }
+
+  if (prevBtn) {
+    prevBtn.addEventListener("click", () => {
+      let prevIdx = currentTrackIndex - 1;
+      if (prevIdx < 0) prevIdx = musicTracks.length - 1;
+      loadAndPlayTrack(prevIdx);
+    });
+  }
+
+  if (nextBtn) {
+    nextBtn.addEventListener("click", () => {
+      let nextIdx = currentTrackIndex + 1;
+      if (nextIdx >= musicTracks.length) nextIdx = 0;
+      loadAndPlayTrack(nextIdx);
+    });
+  }
+
+  if (volSlider) {
+    volSlider.addEventListener("input", () => {
+      audio.volume = volSlider.value;
+    });
+  }
+
+  audio.addEventListener("timeupdate", () => {
+    if (audio.duration) {
+      const pct = (audio.currentTime / audio.duration) * 100;
+      if (progSlider) progSlider.value = pct;
+      if (currTimeEl) currTimeEl.textContent = formatTime(audio.currentTime);
+    }
+  });
+
+  audio.addEventListener("loadedmetadata", () => {
+    if (totalTimeEl) totalTimeEl.textContent = formatTime(audio.duration);
+  });
+
+  audio.addEventListener("ended", () => {
+    let nextIdx = currentTrackIndex + 1;
+    if (nextIdx >= musicTracks.length) nextIdx = 0;
+    loadAndPlayTrack(nextIdx);
+  });
+
+  if (progSlider) {
+    progSlider.addEventListener("input", () => {
+      if (audio.duration) {
+        audio.currentTime = (progSlider.value / 100) * audio.duration;
+      }
+    });
+  }
+
+  loadTrack(currentTrackIndex);
+}
+
+function loadTrack(idx) {
+  const audio = document.getElementById("stark-audio-player");
+  const title = document.getElementById("music-track-title");
+  const desc = document.getElementById("music-track-desc");
+  const img = document.getElementById("music-track-img");
+
+  if (!audio) return;
+
+  currentTrackIndex = idx;
+  const track = musicTracks[idx];
+  audio.src = track.file;
+
+  if (title) title.textContent = track.title;
+  if (desc) desc.textContent = track.desc;
+  
+  const items = document.querySelectorAll(".music-playlist-item");
+  items.forEach((item, i) => {
+    if (i === idx) {
+      item.classList.add("active");
+      item.style.borderColor = "var(--primary)";
+    } else {
+      item.classList.remove("active");
+      item.style.borderColor = "rgba(79, 216, 232, 0.1)";
+    }
+  });
+}
+
+function loadAndPlayTrack(idx) {
+  loadTrack(idx);
+  playTrack();
+}
+
+function playTrack() {
+  const audio = document.getElementById("stark-audio-player");
+  const win = document.getElementById("win-music");
+  if (!audio) return;
+
+  audio.play()
+    .then(() => {
+      isPlaying = true;
+      if (win) win.classList.add("win-music-playing");
+    })
+    .catch(err => {
+      console.warn("Autoplay block or audio load error:", err);
+    });
+}
+
+function togglePlayState() {
+  const audio = document.getElementById("stark-audio-player");
+  const win = document.getElementById("win-music");
+  if (!audio) return;
+
+  if (isPlaying) {
+    audio.pause();
+    isPlaying = false;
+    if (win) win.classList.remove("win-music-playing");
+  } else {
+    playTrack();
+  }
+}
+
+function playFirstTrack() {
+  loadAndPlayTrack(0);
+}
+
+function formatTime(secs) {
+  const m = Math.floor(secs / 60);
+  const s = Math.floor(secs % 60);
+  return `${m}:${s < 10 ? '0' : ''}${s}`;
 }

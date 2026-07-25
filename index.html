@@ -315,7 +315,7 @@
         <div class="icon-label">Gallery Hub</div>
       </div>
 
-      <!-- 3. Hackatime -->
+      <!-- 3. Coding Time -->
       <div class="desktop-icon" onclick="openHackatimeWorkspace()">
         <div class="icon-wrapper hackatime-main-icon">
           <svg viewBox="0 0 48 48" width="32" height="32" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -331,7 +331,25 @@
             </defs>
           </svg>
         </div>
-        <div class="icon-label">Hackatime</div>
+        <div class="icon-label">Coding Time</div>
+      </div>
+
+      <!-- 3b. Leaderboards -->
+      <div class="desktop-icon" onclick="toggleWindow('win-hackatime-leaderboard')">
+        <div class="icon-wrapper leaderboard-main-icon">
+          <svg viewBox="0 0 48 48" width="32" height="32" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect x="6" y="6" width="36" height="36" rx="8" fill="url(#leaderboard-main-bg)" />
+            <!-- Trophy path adjusted to 48x48 scale -->
+            <path d="M16 18h-2a4 4 0 010-8h2M32 18h2a4 4 0 000-8h-2M12 40h24M20 28v4c0 .8-.6 1.4-1.4 1.4H12v4h24v-4h-6.6c-.8 0-1.4-.6-1.4-1.4v-4M24 6a8 8 0 018 8v10c0 4.4-3.6 8-8 8s-8-3.6-8-8V14a8 8 0 018-8z" stroke="#ff2f8e" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
+            <defs>
+              <linearGradient id="leaderboard-main-bg" x1="24" y1="6" x2="24" y2="42" gradientUnits="userSpaceOnUse">
+                <stop stop-color="#0F172A" />
+                <stop offset="1" stop-color="#1E293B" />
+              </linearGradient>
+            </defs>
+          </svg>
+        </div>
+        <div class="icon-label">Leaderboards</div>
       </div>
 
       <!-- 4. Weather HUD -->
@@ -1730,6 +1748,17 @@
               <path d="M9 3v18M15 3v18" />
             </svg>
             <div class="dock-indicator" id="indicator-workspace-hackatime"></div>
+          </div>
+
+          <!-- Hackatime Leaderboard Dock Item -->
+          <div class="taskbar-item dock-item hackatime-leaderboard-icon" data-tooltip="Leaderboards"
+            onclick="toggleWindow('win-hackatime-leaderboard')">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="22" height="22" fill="none"
+              stroke="#ff2f8e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path
+                d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6M18 9h1.5a2.5 2.5 0 0 0 0-5H18M4 22h16M10 14.66V17c0 .55-.45 1-1 1H4v3h16v-3h-5c-.55 0-1-.45-1-1v-2.34M12 2a4 4 0 0 1 4 4v5c0 2.2-1.8 4-4 4s-4-1.8-4-4V6a4 4 0 0 1 4-4z" />
+            </svg>
+            <div class="dock-indicator" id="indicator-win-hackatime-leaderboard"></div>
           </div>
 
         </div>
