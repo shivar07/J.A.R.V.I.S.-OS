@@ -3,3 +3,6 @@ stardance_devlog.md
 .agents/
 .gemini/
 /scratch/
+
+# Local Netlify folder
+.netlify

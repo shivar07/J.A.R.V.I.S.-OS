@@ -2,7 +2,7 @@ const https = require('https');
 
 exports.handler = async function(event, context) {
   return new Promise((resolve, reject) => {
-    const url = "https://corsproxy.io/?https://hackatime.hackclub.com/users/shivar07";
+    const url = "https://api.codetabs.com/v1/proxy?quest=https://hackatime.hackclub.com/users/shivar07";
     const req = https.get(url, {
       headers: {
         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/115.0.0.0 Safari/537.36',
@@ -18,12 +18,12 @@ exports.handler = async function(event, context) {
         let decodedJson = null;
         
         // Option 1: script tag
-        const scriptMatch = html.match(/<script data-page="app" type="application/json">([\s\S]*?)<\/script>/);
+        const scriptMatch = html.match(/<script[^>]*data-page="app"[^>]*>([\s\S]*?)<\/script>/);
         if (scriptMatch) {
           decodedJson = scriptMatch[1];
         } else {
           // Option 2: div data-page attribute
-          const divMatch = html.match(/<div id="app" data-page="([\s\S]*?)">/);
+          const divMatch = html.match(/<div[^>]*id="app"[^>]*data-page="([\s\S]*?)"/);
           if (divMatch) {
             decodedJson = divMatch[1]
               .replace(/&quot;/g, '"')
