@@ -1,3 +1,4 @@
+// welcome greeting speak callbacks
 
 
 let audioMuted = localStorage.getItem("system-audio") === "off";
