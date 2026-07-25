@@ -2,7 +2,7 @@ const https = require('https');
 
 exports.handler = async function(event, context) {
   return new Promise((resolve, reject) => {
-    const url = "https://api.allorigins.win/raw?url=https://hackatime.hackclub.com/users/shivar07";
+    const url = "https://corsproxy.io/?https://hackatime.hackclub.com/users/shivar07";
     const req = https.get(url, {
       headers: { 'User-Agent': 'Mozilla/5.0' }
     }, (res) => {
