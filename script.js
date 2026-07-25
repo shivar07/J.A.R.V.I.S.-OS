@@ -1705,7 +1705,17 @@ const musicTracks = [
   { title: "Iron Man", desc: "AC/DC - Iron Man", file: "music/Iron_Man.m4a", img: "https://img.youtube.com/vi/wbjc55JqkGs/0.jpg" },
   { title: "Back In Black", desc: "AC/DC - Back In Black", file: "music/Back_In_Black.m4a", img: "https://img.youtube.com/vi/hbGpqY2cXa4/0.jpg" },
   { title: "Shoot To Thrill", desc: "AC/DC - Shoot To Thrill", file: "music/Shoot_to_Thrill.m4a", img: "https://img.youtube.com/vi/lbC0CCS06VE/0.jpg" },
-  { title: "Driving With The Top Down", desc: "Ramin Djawadi - Iron Man OST", file: "music/Driving_With_The_Top_Down.m4a", img: "https://img.youtube.com/vi/lhg9bYNLvOg/0.jpg" }
+  { title: "Driving With The Top Down", desc: "Ramin Djawadi - Iron Man OST", file: "music/Driving_With_The_Top_Down.m4a", img: "https://img.youtube.com/vi/lhg9bYNLvOg/0.jpg" },
+  { title: "Shape of You", desc: "Ed Sheeran - Shape of You", file: "music/Shape_of_You.m4a", img: "https://img.youtube.com/vi/JGwWNGJdvx8/0.jpg" },
+  { title: "One Dance (8D Audio)", desc: "Drake - One Dance", file: "music/One_Dance.m4a", img: "https://img.youtube.com/vi/r2U0_xJLuXQ/0.jpg" },
+  { title: "Lose My Mind (F1)", desc: "Don Toliver - Lose My Mind", file: "music/Lose_My_Mind.m4a", img: "https://img.youtube.com/vi/WWEs82u37Mw/0.jpg" },
+  { title: "Jalebi Baby Mashup", desc: "TikTok Remix Thailand", file: "music/Jalebi_Baby_Mashup.m4a", img: "https://img.youtube.com/vi/kM6T-ZvgfoI/0.jpg" },
+  { title: "[Da Da Da] Jarico", desc: "Jarico - Remix", file: "music/Da_Da_Da_Jarico.m4a", img: "https://img.youtube.com/vi/3PY2j22d3Ds/0.jpg" },
+  { title: "Your Woman Remix", desc: "White Town - Remix", file: "music/Your_Woman_Remix.m4a", img: "https://img.youtube.com/vi/FSmYI_CiWsw/0.jpg" },
+  { title: "Boom Shaka", desc: "KR$NA x Dhanda Nyoliwala", file: "music/Boom_Shaka.m4a", img: "https://img.youtube.com/vi/cL0KKSPjZf8/0.jpg" },
+  { title: "FUNK CRIMINAL", desc: "ICEDMANE - Slowed", file: "music/Funk_Criminal.m4a", img: "https://img.youtube.com/vi/AAUW-f3_oCg/0.jpg" },
+  { title: "Kar Gayi Chull", desc: "Bhumika's Beatzzz - Slowed", file: "music/Kar_Gayi_Chull.m4a", img: "https://img.youtube.com/vi/Bea019pOw5w/0.jpg" },
+  { title: "Dj Waley Babu", desc: "Badshah - Slowed", file: "music/Dj_Waley_Babu.m4a", img: "https://img.youtube.com/vi/k4r-Oh2IiAc/0.jpg" }
 ];
 
 let currentTrackIndex = 0;
