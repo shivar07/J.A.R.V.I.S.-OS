@@ -1632,10 +1632,10 @@ function renderLeaderboard() {
 
 // --- J.A.R.V.I.S. Welcome Sequence & Audio Decrypter Matrix ---
 const musicTracks = [
-  { title: "Iron Man", desc: "AC/DC - Iron Man", file: "music/Iron_Man.m4a", img: "image/me.png" },
-  { title: "Back In Black", desc: "AC/DC - Back In Black", file: "music/Back_In_Black.m4a", img: "image/me.png" },
-  { title: "Shoot To Thrill", desc: "AC/DC - Shoot To Thrill", file: "music/Shoot_to_Thrill.m4a", img: "image/me.png" },
-  { title: "Driving With The Top Down", desc: "Ramin Djawadi - Iron Man OST", file: "music/Driving_With_The_Top_Down.m4a", img: "image/me.png" }
+  { title: "Iron Man", desc: "AC/DC - Iron Man", file: "music/Iron_Man.m4a", img: "https://img.youtube.com/vi/lhg9bYNLvOg/0.jpg" },
+  { title: "Back In Black", desc: "AC/DC - Back In Black", file: "music/Back_In_Black.m4a", img: "https://img.youtube.com/vi/lbC0CCS06VE/0.jpg" },
+  { title: "Shoot To Thrill", desc: "AC/DC - Shoot To Thrill", file: "music/Shoot_to_Thrill.m4a", img: "https://img.youtube.com/vi/hbGpqY2cXa4/0.jpg" },
+  { title: "Driving With The Top Down", desc: "Ramin Djawadi - Iron Man OST", file: "music/Driving_With_The_Top_Down.m4a", img: "https://img.youtube.com/vi/wbjc55JqkGs/0.jpg" }
 ];
 
 let currentTrackIndex = 0;
@@ -1835,6 +1835,7 @@ function loadTrack(idx) {
 
   if (title) title.textContent = track.title;
   if (desc) desc.textContent = track.desc;
+  if (img && track.img) img.src = track.img;
   
   const items = document.querySelectorAll(".music-playlist-item");
   items.forEach((item, i) => {
