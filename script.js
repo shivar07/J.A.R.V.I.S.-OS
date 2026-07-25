@@ -537,9 +537,6 @@ function runBiosBoot(callback) {
     } else {
       setTimeout(() => {
         biosScreen.style.display = "none";
-        if (bootScreen) {
-          bootScreen.style.display = "flex";
-        }
         if (callback) callback();
       }, 800);
     }
@@ -552,48 +549,30 @@ function initBootSequence() {
   const bootScreen = document.getElementById("boot-screen");
   const loginScreen = document.getElementById("login-screen");
   const desktopArea = document.getElementById("desktop-area");
-  const bootStatusText = document.getElementById("boot-status-text");
-  const bootProgress = document.getElementById("boot-progress");
   
-  if (bootStatusText) bootStatusText.style.display = "block";
-  if (bootProgress) bootProgress.style.display = "block";
-
-  const bootSteps = [
-    { progress: 15, text: "LOADING DEVICE HARDWARE PINS..." },
-    { progress: 30, text: "INITIALIZING SPEECH CO-PILOT COEFFICIENTS..." },
-    { progress: 50, text: "ESTABLISHING SECURE WEB INTERRUPTS..." },
-    { progress: 70, text: "DECRYPTING CORE MISSION CONTROLLER KERNEL..." },
-    { progress: 85, text: "CONNECTING J.A.R.V.I.S. QUANTUM NETWORK MATRIX..." },
-    { progress: 100, text: "SYSTEM REBOOT SUCCESSFUL." }
-  ];
-
-  let currentStep = 0;
-
-  function runNextBootStep() {
-    if (currentStep < bootSteps.length) {
-      const step = bootSteps[currentStep];
-      if (bootProgress) bootProgress.style.width = step.progress + "%";
-      if (bootStatusText) bootStatusText.textContent = step.text;
-      
-      if (typeof synthSound === "function") {
-        synthSound("click");
-      }
-      
-      currentStep++;
-      setTimeout(runNextBootStep, 80 + Math.random() * 50);
-    } else {
-      setTimeout(() => {
-        if (bootScreen) bootScreen.style.opacity = "0";
-        setTimeout(() => {
-          if (bootScreen) bootScreen.style.display = "none";
-          if (loginScreen) {
-            loginScreen.style.display = "flex";
-            loginScreen.style.opacity = "1";
-          }
-        }, 500);
-      }, 300);
-    }
+  // Start with clean Windows boot loader (only Windows logo and loading dots, no debug text)
+  if (bootScreen) {
+    bootScreen.style.display = "flex";
+    bootScreen.style.opacity = "1";
   }
+
+  // Windows loading screen runs for 3.5 seconds
+  setTimeout(() => {
+    if (bootScreen) bootScreen.style.opacity = "0";
+    
+    setTimeout(() => {
+      if (bootScreen) bootScreen.style.display = "none";
+      
+      // Stark BIOS terminal console logs print next
+      runBiosBoot(() => {
+        // Once terminal boot completes, transition to Login Screen
+        if (loginScreen) {
+          loginScreen.style.display = "flex";
+          loginScreen.style.opacity = "1";
+        }
+      });
+    }, 500);
+  }, 3500);
 
   const loginBtn = document.getElementById("login-signin-btn");
   if (loginBtn) {
@@ -621,10 +600,6 @@ function initBootSequence() {
     if (loginScreen && loginScreen.style.display === "flex" && e.key === "Enter") {
       if (loginBtn) loginBtn.click();
     }
-  });
-
-  runBiosBoot(() => {
-    setTimeout(runNextBootStep, 300);
   });
 }
 
