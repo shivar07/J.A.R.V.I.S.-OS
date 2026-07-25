@@ -130,6 +130,7 @@ document.addEventListener("DOMContentLoaded", () => {
   initHackatime();
   initMusicPromptHandlers();
   initMusicPlayer();
+  initBrowser();
   
   initBootSequence();
 });
@@ -1923,4 +1924,254 @@ function formatTime(secs) {
   const m = Math.floor(secs / 60);
   const s = Math.floor(secs % 60);
   return `${m}:${s < 10 ? '0' : ''}${s}`;
+}
+
+// --- Google Chrome Simulator Engine ---
+function initBrowser() {
+  const tabsList = document.getElementById("chrome-tabs-list");
+  const viewportsContainer = document.getElementById("chrome-viewports-container");
+  const addressInput = document.getElementById("chrome-address-input");
+  const goBtn = document.getElementById("chrome-go-btn");
+  const backBtn = document.getElementById("chrome-back-btn");
+  const forwardBtn = document.getElementById("chrome-forward-btn");
+  const reloadBtn = document.getElementById("chrome-reload-btn");
+  const homeBtn = document.getElementById("chrome-home-btn");
+  const newTabBtn = document.getElementById("chrome-new-tab-btn");
+  const extBtn = document.getElementById("chrome-ext-btn");
+
+  if (!tabsList || !viewportsContainer) return;
+
+  let tabs = [];
+  let activeTabId = null;
+  let nextTabId = 1;
+
+  function createTab(url = "https://en.wikipedia.org/wiki/Main_Page") {
+    const tabId = nextTabId++;
+    
+    let cleanUrl = url;
+    if (!/^https?:\/\//i.test(cleanUrl)) {
+      cleanUrl = "https://" + cleanUrl;
+    }
+
+    const tab = {
+      id: tabId,
+      url: cleanUrl,
+      title: "Wikipedia"
+    };
+
+    tabs.push(tab);
+
+    const tabEl = document.createElement("div");
+    tabEl.className = "chrome-tab";
+    tabEl.id = `tab-${tabId}`;
+    tabEl.style.display = "flex";
+    tabEl.style.alignItems = "center";
+    tabEl.style.background = "#20242c";
+    tabEl.style.border = "1px solid #2d3139";
+    tabEl.style.borderBottom = "none";
+    tabEl.style.borderRadius = "6px 6px 0 0";
+    tabEl.style.padding = "2px 10px";
+    tabEl.style.height = "28px";
+    tabEl.style.cursor = "pointer";
+    tabEl.style.fontSize = "11px";
+    tabEl.style.color = "#a5adba";
+    tabEl.style.maxWidth = "140px";
+    tabEl.style.minWidth = "85px";
+    tabEl.style.justifyContent = "space-between";
+    tabEl.style.boxSizing = "border-box";
+    tabEl.style.transition = "background 0.2s";
+
+    tabEl.innerHTML = `
+      <span class="tab-title" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis; flex-grow: 1;">Wikipedia</span>
+      <span class="tab-close" style="font-size: 9px; margin-left: 6px; color: #626b77; font-weight: bold; cursor: pointer; display: flex; align-items: center; justify-content: center; width: 14px; height: 14px; border-radius: 50%; transition: background 0.15s, color 0.15s;">✕</span>
+    `;
+
+    tabEl.addEventListener("click", (e) => {
+      if (e.target.classList.contains("tab-close")) {
+        e.stopPropagation();
+        closeTab(tabId);
+      } else {
+        activateTab(tabId);
+      }
+    });
+
+    const closeBtn = tabEl.querySelector(".tab-close");
+    closeBtn.addEventListener("mouseenter", () => {
+      closeBtn.style.background = "rgba(255,255,255,0.15)";
+      closeBtn.style.color = "#ffffff";
+    });
+    closeBtn.addEventListener("mouseleave", () => {
+      closeBtn.style.background = "none";
+      closeBtn.style.color = "#626b77";
+    });
+
+    tabsList.appendChild(tabEl);
+
+    const iframe = document.createElement("iframe");
+    iframe.id = `iframe-${tabId}`;
+    iframe.src = cleanUrl;
+    iframe.style.width = "100%";
+    iframe.style.height = "100%";
+    iframe.style.border = "none";
+    iframe.style.display = "none";
+    iframe.style.background = "#ffffff";
+    
+    viewportsContainer.appendChild(iframe);
+
+    activateTab(tabId);
+  }
+
+  function activateTab(tabId) {
+    activeTabId = tabId;
+    const tab = tabs.find(t => t.id === tabId);
+    if (!tab) return;
+
+    tabs.forEach(t => {
+      const el = document.getElementById(`tab-${t.id}`);
+      if (el) {
+        if (t.id === tabId) {
+          el.style.background = "#181a1f";
+          el.style.color = "#ffffff";
+          el.style.borderTop = "2px solid var(--primary)";
+        } else {
+          el.style.background = "#0f1115";
+          el.style.color = "#a5adba";
+          el.style.borderTop = "none";
+        }
+      }
+
+      const frame = document.getElementById(`iframe-${t.id}`);
+      if (frame) {
+        frame.style.display = t.id === tabId ? "block" : "none";
+      }
+    });
+
+    if (addressInput) {
+      addressInput.value = tab.url;
+    }
+  }
+
+  function closeTab(tabId) {
+    const idx = tabs.findIndex(t => t.id === tabId);
+    if (idx === -1) return;
+
+    const tabEl = document.getElementById(`tab-${tabId}`);
+    if (tabEl) tabEl.remove();
+
+    const iframe = document.getElementById(`iframe-${tabId}`);
+    if (iframe) iframe.remove();
+
+    tabs.splice(idx, 1);
+
+    if (tabs.length === 0) {
+      createTab();
+    } else if (activeTabId === tabId) {
+      const newActive = tabs[Math.max(0, idx - 1)];
+      activateTab(newActive.id);
+    }
+  }
+
+  function navigateActiveTab() {
+    if (!activeTabId) return;
+    const tab = tabs.find(t => t.id === activeTabId);
+    if (!tab) return;
+
+    let inputUrl = addressInput.value.trim();
+    if (!inputUrl) return;
+
+    if (!/^https?:\/\//i.test(inputUrl)) {
+      inputUrl = "https://" + inputUrl;
+    }
+
+    tab.url = inputUrl;
+    
+    try {
+      const host = new URL(inputUrl).hostname.replace("www.", "");
+      tab.title = host.charAt(0).toUpperCase() + host.slice(1);
+      const tabEl = document.getElementById(`tab-${activeTabId}`);
+      if (tabEl) {
+        const titleEl = tabEl.querySelector(".tab-title");
+        if (titleEl) titleEl.textContent = tab.title;
+      }
+    } catch (e) {
+      tab.title = "Web Page";
+    }
+
+    const iframe = document.getElementById(`iframe-${activeTabId}`);
+    if (iframe) {
+      iframe.src = inputUrl;
+    }
+  }
+
+  if (goBtn) {
+    goBtn.addEventListener("click", navigateActiveTab);
+  }
+
+  if (addressInput) {
+    addressInput.addEventListener("keydown", (e) => {
+      if (e.key === "Enter") navigateActiveTab();
+    });
+  }
+
+  if (newTabBtn) {
+    newTabBtn.addEventListener("click", () => {
+      createTab();
+    });
+  }
+
+  if (homeBtn) {
+    homeBtn.addEventListener("click", () => {
+      if (activeTabId) {
+        addressInput.value = "https://en.wikipedia.org/wiki/Main_Page";
+        navigateActiveTab();
+      }
+    });
+  }
+
+  if (reloadBtn) {
+    reloadBtn.addEventListener("click", () => {
+      const iframe = document.getElementById(`iframe-${activeTabId}`);
+      if (iframe) {
+        iframe.src = iframe.src;
+      }
+    });
+  }
+
+  if (extBtn) {
+    extBtn.addEventListener("click", () => {
+      const tab = tabs.find(t => t.id === activeTabId);
+      if (tab) {
+        window.open(tab.url, "_blank");
+      }
+    });
+  }
+
+  if (backBtn) {
+    backBtn.addEventListener("click", () => {
+      const iframe = document.getElementById(`iframe-${activeTabId}`);
+      if (iframe) {
+        try {
+          iframe.contentWindow.history.back();
+        } catch (e) {
+          console.warn("CORS blocked history navigation inside iframe");
+        }
+      }
+    });
+  }
+
+  if (forwardBtn) {
+    forwardBtn.addEventListener("click", () => {
+      const iframe = document.getElementById(`iframe-${activeTabId}`);
+      if (iframe) {
+        try {
+          iframe.contentWindow.history.forward();
+        } catch (e) {
+          console.warn("CORS blocked history navigation inside iframe");
+        }
+      }
+    });
+  }
+
+  // Create initial tab
+  createTab();
 }
