@@ -2,7 +2,7 @@ const https = require('https');
 
 exports.handler = async function(event, context) {
   return new Promise((resolve, reject) => {
-    const url = "https://hackatime.hackclub.com/leaderboards";
+    const url = "https://hackatime.hackclub.com/leaderboard";
     const req = https.get(url, {
       headers: { 'User-Agent': 'Mozilla/5.0' }
     }, (res) => {
