@@ -1686,8 +1686,8 @@ function initMusicPromptHandlers() {
       // Design Hub (Gallery) on the right side
       openWindowAt("win-gallery", "40px", "calc(100% - 640px)", "620px", "82vh");
 
-      // Terminal window on the left side
-      openWindowAt("win-terminal", "40px", "20px", "620px", "82vh");
+      // J.A.R.V.I.S. Subsystem on the left side
+      openWindowAt("win-jarvis", "40px", "20px", "480px", "480px");
 
       // Start playing music!
       playFirstTrack();
