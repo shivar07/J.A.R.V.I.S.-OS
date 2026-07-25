@@ -1,6 +1,500 @@
-<!-- index.html base structure -->
 <!DOCTYPE html>
-<html>
-<head><title>J.A.R.V.I.S.-OS</title></head>
-<body></body>
-</html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>RoboOS - Robotic Engineer Command Center</title>
+  <meta name="description" content="A futuristic, glassmorphic sci-fi web operating system for robotics.">
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+
+  <div class="desktop-bg" id="desktop-bg"
+    style="background-image: url('wallpaper/wp11991604-neon-4k-iron-man-wallpapers.jpg');"></div>
+
+  <div id="desktop-area"
+    style="display: none; opacity: 0; transition: opacity 0.8s ease; width: 100%; height: 100%; overflow: hidden; position: absolute; top: 0; left: 0; z-index: 5;">
+
+    <div class="search-container-wrap">
+      <div class="desktop-search-container">
+        <svg class="search-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
+          fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="11" cy="11" r="8"></circle>
+          <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+        </svg>
+        <input type="text" id="desktop-search-input" placeholder="Search apps... (⌘K)" autocomplete="off">
+        <div class="search-results-list" id="search-results"></div>
+      </div>
+    </div>
+
+
+    <header class="top-bar">
+      <!-- Left: CPU Telemetry -->
+      <div class="top-bar-left"
+        style="display: flex; align-items: center; gap: 10px; font-family: var(--font-mono); font-size: 11px; color: var(--text-main); width: 35%;">
+        <span
+          style="font-family: var(--font-hud); font-size: 10px; color: var(--primary); letter-spacing: 0.5px; white-space: nowrap;">CPU
+          LOAD:</span>
+        <span id="diag-cpu-val" style="width: 32px; font-weight: bold; text-align: right;">28%</span>
+        <div
+          style="flex-grow: 1; max-width: 150px; height: 6px; background: rgba(79, 216, 232, 0.1); border-radius: 3px; overflow: hidden; border: 1.5px solid rgba(79, 216, 232, 0.25);">
+          <div id="diag-cpu-bar"
+            style="width: 28%; height: 100%; background: var(--primary); box-shadow: var(--shadow-glow); transition: width 0.5s ease;">
+          </div>
+        </div>
+      </div>
+
+      <!-- Center: Thermal Telemetry -->
+      <div class="top-bar-center"
+        style="display: flex; align-items: center; gap: 10px; font-family: var(--font-mono); font-size: 11px; color: var(--text-main); justify-content: center; width: 30%;">
+        <span
+          style="font-family: var(--font-hud); font-size: 9px; color: var(--accent); letter-spacing: 1px; white-space: nowrap;">THERMAL
+          PROFILE:</span>
+        <span id="diag-temp-val" style="font-weight: bold;">46°C</span>
+        <div
+          style="width: 60px; height: 6px; background: rgba(255, 47, 142, 0.1); border-radius: 3px; overflow: hidden; border: 1.5px solid rgba(255, 47, 142, 0.25);">
+          <div id="diag-temp-bar"
+            style="width: 58%; height: 100%; background: var(--accent); box-shadow: 0 0 8px var(--accent); transition: width 0.5s ease;">
+          </div>
+        </div>
+      </div>
+
+      <!-- Right: Memory Telemetry -->
+      <div class="top-bar-right"
+        style="display: flex; align-items: center; gap: 10px; font-family: var(--font-mono); font-size: 11px; color: var(--text-main); justify-content: flex-end; width: 35%;">
+        <span
+          style="font-family: var(--font-hud); font-size: 10px; color: var(--primary); letter-spacing: 0.5px; white-space: nowrap;">SYS
+          MEMORY:</span>
+        <span id="diag-ram-val" style="white-space: nowrap; font-weight: bold;">4.2 GB / 8.0 GB</span>
+        <div
+          style="flex-grow: 1; max-width: 150px; height: 6px; background: rgba(79, 216, 232, 0.1); border-radius: 3px; overflow: hidden; border: 1.5px solid rgba(79, 216, 232, 0.25);">
+          <div id="diag-ram-bar"
+            style="width: 52%; height: 100%; background: var(--primary); box-shadow: var(--shadow-glow); transition: width 0.5s ease;">
+          </div>
+        </div>
+      </div>
+    </header>
+
+
+    <div class="start-menu" id="start-menu">
+      <!-- Left Pane (Main Start Menu) -->
+      <div class="start-main-pane">
+        <!-- Search bar -->
+        <div class="start-search-wrap">
+          <svg class="start-search-icon" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="11" cy="11" r="8"></circle>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+          </svg>
+          <input type="text" id="start-search-input" placeholder="Search for apps, settings, and documents" class="start-search-input">
+          <svg class="start-phone-icon" viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
+            <path d="M17 1H7c-1.1 0-2 .9-2 2v18c0 1.1.9 2 2 2h10c1.1 0 2-.9 2-2V3c0-1.1-.9-2-2-2zm-5 21c-.55 0-1-.45-1-1s.45-1 1-1 1 .45 1 1-.45 1-1 1zm5-4H7V4h10v14z"/>
+          </svg>
+        </div>
+
+        <!-- Pinned Section -->
+        <div class="start-section-header">
+          <span>Pinned</span>
+        </div>
+        <div class="start-pinned-grid">
+          <div class="start-pinned-item" onclick="jarvisSpeak('Opening Office 365, sir.')">
+            <div class="start-pinned-icon office-icon">
+              <svg viewBox="0 0 48 48" width="32" height="32"><path fill="#E03E2F" d="M38 4H10A6 6 0 004 10v28a6 6 0 006 6h28a6 6 0 006-6V10a6 6 0 00-6-6z"/><path fill="#FFF" d="M16 28h16V16H16v12zm4-8h8v4h-8v-4z"/></svg>
+            </div>
+            <span class="start-pinned-label">Office 365</span>
+          </div>
+          <div class="start-pinned-item" onclick="toggleWindow('win-browser')">
+            <div class="start-pinned-icon chrome-icon">
+              <svg viewBox="0 0 24 24" width="32" height="32">
+                <path fill="#4285F4" d="M12 2c5.52 0 10 4.48 10 10s-4.48 10-10 10S2 17.52 2 12 6.48 2 12 2z" />
+                <path fill="#EA4335" d="M12 2a9.985 9.985 0 0 1 8.66 5H12v7l-6.06-10.5C7.45 2.5 9.66 2 12 2z" />
+                <path fill="#FBBC05" d="M22 12a9.985 9.985 0 0 1-5 8.66L11 10.15h11z" />
+                <path fill="#34A853" d="M12 22a9.985 9.985 0 0 1-8.66-5L9.4 6.5l2.6 15.5z" />
+                <circle cx="12" cy="12" r="4" fill="#fff" />
+                <circle cx="12" cy="12" r="3.2" fill="#4285F4" />
+              </svg>
+            </div>
+            <span class="start-pinned-label">Google Chrome</span>
+          </div>
+          <div class="start-pinned-item" onclick="jarvisSpeak('Antigravity core system running at optimal parameters.')">
+            <div class="start-pinned-icon antigravity-icon">
+              <svg viewBox="0 0 48 48" width="32" height="32" fill="none"><rect width="48" height="48" rx="8" fill="#1E293B"/><path d="M24 8L8 36h32L24 8z" fill="url(#antigravity-start-grad)"/><defs><linearGradient id="antigravity-start-grad" x1="24" y1="8" x2="24" y2="36" gradientUnits="userSpaceOnUse"><stop stop-color="#38BDF8"/><stop offset="1" stop-color="#3B82F6"/></linearGradient></defs></svg>
+            </div>
+            <span class="start-pinned-label">Antigravity</span>
+          </div>
+          <div class="start-pinned-item" onclick="toggleWindow('win-terminal')">
+            <div class="start-pinned-icon arduino-icon">
+              <svg viewBox="0 0 48 48" width="32" height="32" fill="none"><rect width="48" height="48" rx="8" fill="#008184"/><path d="M14 24c0-4.4 3.6-8 8-8s8 3.6 8 8-3.6 8-8 8-8-3.6-8-8z" stroke="#FFF" stroke-width="3"/><path d="M26 24c0-4.4 3.6-8 8-8s8 3.6 8 8-3.6 8-8 8-8-3.6-8-8z" stroke="#FFF" stroke-width="3"/><path d="M18 24h8m6 0h8" stroke="#FFF" stroke-width="3" stroke-linecap="round"/></svg>
+            </div>
+            <span class="start-pinned-label">Arduino IDE</span>
+          </div>
+          <div class="start-pinned-item" onclick="toggleWindow('win-jarvis')">
+            <div class="start-pinned-icon claude-icon">
+              <svg viewBox="0 0 48 48" width="32" height="32" fill="none"><rect width="48" height="48" rx="8" fill="#D97706"/><circle cx="24" cy="24" r="10" fill="#FEF3C7"/><path d="M20 20l4 8 4-8" stroke="#D97706" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </div>
+            <span class="start-pinned-label">Claude</span>
+          </div>
+        </div>
+
+        <!-- Recommended Section -->
+        <div class="start-section-header">
+          <span>Recommended</span>
+          <a class="start-header-link" onclick="jarvisSpeak('Showing all activities, sir.')">Show all ></a>
+        </div>
+        <div class="start-rec-grid">
+          <div class="start-rec-item" onclick="jarvisSpeak('Opening Autodesk Fusion logs.')">
+            <div class="start-rec-icon fusion">F</div>
+            <div class="start-rec-details">
+              <div class="start-rec-title">Autodesk Fusion</div>
+              <div class="start-rec-subtitle">Recently added</div>
+            </div>
+          </div>
+          <div class="start-rec-item" onclick="jarvisSpeak('NodeJS environment active.')">
+            <div class="start-rec-icon node">JS</div>
+            <div class="start-rec-details">
+              <div class="start-rec-title">Node.js</div>
+              <div class="start-rec-subtitle">Recently added</div>
+            </div>
+          </div>
+          <div class="start-rec-item" onclick="toggleWindow('win-terminal')">
+            <div class="start-rec-icon cmd">C:\</div>
+            <div class="start-rec-details">
+              <div class="start-rec-title">Node.js command prompt</div>
+              <div class="start-rec-subtitle">Recently added</div>
+            </div>
+          </div>
+          <div class="start-rec-item" onclick="jarvisSpeak('Opening Devlog five.')">
+            <div class="start-rec-icon file">📄</div>
+            <div class="start-rec-details">
+              <div class="start-rec-title">dev5</div>
+              <div class="start-rec-subtitle">23m ago</div>
+            </div>
+          </div>
+          <div class="start-rec-item" onclick="toggleWindow('win-browser')">
+            <div class="start-rec-icon file">📄</div>
+            <div class="start-rec-details">
+              <div class="start-rec-title">NASA-APOD-2026-07-24</div>
+              <div class="start-rec-subtitle">23m ago</div>
+            </div>
+          </div>
+          <div class="start-rec-item" onclick="toggleWindow('win-gallery')">
+            <div class="start-rec-icon img">🖼️</div>
+            <div class="start-rec-details">
+              <div class="start-rec-title">Screenshot 2026-07-25 122235</div>
+              <div class="start-rec-subtitle">57m ago</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Scrollable All Apps section (Alphabetical) -->
+        <div class="start-section-header">
+          <span>All</span>
+          <span class="start-header-link">View: List</span>
+        </div>
+        <div class="start-all-list custom-scroll">
+          <div class="start-all-letter">A</div>
+          <div class="start-all-item" onclick="jarvisSpeak('Accessibility features.')"><span class="start-all-icon">📂</span>Accessibility</div>
+          <div class="start-all-item" onclick="toggleWindow('win-jarvis')"><span class="start-all-icon">🪐</span>Antigravity</div>
+          <div class="start-all-item" onclick="toggleWindow('win-jarvis')"><span class="start-all-icon">💻</span>Antigravity IDE <span class="tag-new">New</span></div>
+          <div class="start-all-item" onclick="toggleWindow('win-terminal')"><span class="start-all-icon">♾️</span>Arduino IDE</div>
+          <div class="start-all-item" onclick="jarvisSpeak('Opening Autodesk Fusion.')"><span class="start-all-icon">🏗️</span>Autodesk Fusion</div>
+          
+          <div class="start-all-letter">B</div>
+          <div class="start-all-item" onclick="jarvisSpeak('Opening B and O Audio Control.')"><span class="start-all-icon">🔊</span>B&O Audio Control <span class="tag-new">New</span></div>
+        </div>
+
+        <!-- Footer -->
+        <div class="start-footer-bar">
+          <div class="start-footer-user" onclick="jarvisSpeak('User profile: Sujay Patel, administrator.')">
+            <img src="image/me.png" alt="Sujay Patel" class="start-footer-avatar">
+            <span class="start-footer-username">sujay patel</span>
+          </div>
+          <div class="start-footer-actions">
+            <svg class="start-footer-btn" viewBox="0 0 24 24" width="16" height="16" onclick="toggleWindow('win-gallery')"><path fill="currentColor" d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/></svg>
+            <svg class="start-footer-btn" viewBox="0 0 24 24" width="16" height="16" onclick="jarvisSpeak('Opening downloads.')"><path fill="currentColor" d="M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96zM17 13l-5 5-5-5h3V9h4v4h3z"/></svg>
+            <svg class="start-footer-btn" viewBox="0 0 24 24" width="16" height="16" onclick="toggleWindow('win-music')"><path fill="currentColor" d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h6V3h-6z"/></svg>
+            <svg class="start-footer-btn" viewBox="0 0 24 24" width="16" height="16" onclick="toggleWindow('win-gallery')"><path fill="currentColor" d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/></svg>
+            <svg class="start-footer-btn" viewBox="0 0 24 24" width="16" height="16" onclick="jarvisSpeak('Initializing optics camera hardware, sir.')"><circle cx="12" cy="12" r="3.2" fill="currentColor"/><path fill="currentColor" d="M9 2L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2h-3.17L15 2H9zm3 15c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z"/></svg>
+            <svg class="start-footer-btn" viewBox="0 0 24 24" width="16" height="16" onclick="toggleWindow('win-gallery')"><path fill="currentColor" d="M10 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2h-8l-2-2z"/></svg>
+            <svg class="start-footer-btn" viewBox="0 0 24 24" width="16" height="16" onclick="toggleWindow('win-settings')"><path fill="currentColor" d="M19.43 12.98c.04-.32.07-.64.07-.98s-.03-.66-.07-.98l2.11-1.65c.19-.15.24-.42.12-.64l-2-3.46c-.12-.22-.39-.3-.61-.22l-2.49 1c-.52-.4-1.08-.73-1.69-.98l-.38-2.65C14.46 2.18 14.25 2 14 2h-4c-.25 0-.46.18-.49.42l-.38 2.65c-.61.25-1.17.59-1.69.98l-2.49-1c-.23-.09-.49 0-.61.22l-2 3.46c-.13.22-.07.49.12.64l2.11 1.65c-.04.32-.07.65-.07.98s.03.66.07.98l-2.11 1.65c-.19.15-.24.42-.12.64l2 3.46c.12.22.39.3.61.22l2.49-1c.52.4 1.08.73 1.69.98l.38 2.65c.03.24.24.42.49.42h4c.25 0 .46-.18.49-.42l.38-2.65c.61-.25 1.17-.59 1.69-.98l2.49 1c.23.09.49 0 .61-.22l2-3.46c.12-.22.07-.49-.12-.64l-2.11-1.65zM12 15.5c-1.93 0-3-1.57-3-3.5s1.57-3 3-3 3 1.57 3 3-1.57 3-3 3z"/></svg>
+            <svg class="start-footer-btn power" viewBox="0 0 24 24" width="16" height="16" onclick="window.location.reload()"><path fill="currentColor" d="M13 3h-2v10h2V3zm4.83 2.17l-1.42 1.42A6.92 6.92 0 0 1 19 12c0 3.87-3.13 7-7 7s-7-3.13-7-7a6.92 6.92 0 0 1 2.59-5.41L6.17 5.17A8.93 8.93 0 0 0 3 12c0 4.97 4.03 9 9 9s9-4.03 9-9a8.93 8.93 0 0 0-3.17-6.83z"/></svg>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right Pane (Mobile Linkage) -->
+      <div class="start-side-pane" id="start-side-pane">
+        <div class="start-side-graphic">
+          <svg viewBox="0 0 120 100" width="80" height="80">
+            <!-- Laptop screen mock -->
+            <rect x="10" y="20" width="70" height="45" rx="3" fill="#D1D5DB" />
+            <rect x="14" y="24" width="62" height="37" fill="#F43F5E" />
+            <!-- Laptop base mock -->
+            <polygon points="5,65 85,65 80,72 10,72" fill="#9CA3AF" />
+            <!-- Small widget shapes on laptop -->
+            <circle cx="25" cy="42" r="3" fill="#FFF" />
+            <circle cx="35" cy="42" r="3" fill="#FFF" />
+            <circle cx="45" cy="42" r="3" fill="#FFF" />
+            <!-- Phone overlay -->
+            <rect x="75" y="10" width="30" height="60" rx="4" fill="#312E81" />
+            <rect x="78" y="14" width="24" height="52" rx="2" fill="#1E1B4B" />
+            <rect x="80" y="18" width="20" height="12" rx="1.5" fill="#3B82F6" />
+          </svg>
+        </div>
+        <div class="start-side-title">Access your mobile device here</div>
+        <div class="start-side-desc">Keep up with calls, messages, and recent activity here in the Start menu.</div>
+        <div class="start-side-actions">
+          <span class="start-side-action-label">Select device</span>
+          <div class="start-side-buttons">
+            <button class="start-side-btn active" onclick="jarvisSpeak('Android linkage selected, sir.')">Android™</button>
+            <button class="start-side-btn" onclick="jarvisSpeak('iPhone linkage selected, sir.')">iPhone®</button>
+          </div>
+        </div>
+        <div class="start-side-hide" onclick="toggleStartSidePane()">Hide this pane</div>
+      </div>
+    </div>
+
+    <main class="desktop-grid">
+      <div class="hud-brand-header">
+        <div class="hud-brand-logo">J.A.R.V.I.S. CORE</div>
+        <div class="hud-brand-sub">SYSTEM LEVEL 01</div>
+      </div>
+
+
+      <!-- 1. Chrome -->
+      <div class="desktop-icon" onclick="toggleWindow('win-browser')">
+        <div class="icon-wrapper chrome-icon">
+          <svg viewBox="0 0 24 24" width="32" height="32">
+            <path fill="#4285F4" d="M12 2c5.52 0 10 4.48 10 10s-4.48 10-10 10S2 17.52 2 12 6.48 2 12 2z" />
+            <path fill="#EA4335" d="M12 2a9.985 9.985 0 0 1 8.66 5H12v7l-6.06-10.5C7.45 2.5 9.66 2 12 2z" />
+            <path fill="#FBBC05" d="M22 12a9.985 9.985 0 0 1-5 8.66L11 10.15h11z" />
+            <path fill="#34A853" d="M12 22a9.985 9.985 0 0 1-8.66-5L9.4 6.5l2.6 15.5z" />
+            <circle cx="12" cy="12" r="4" fill="#fff" />
+            <circle cx="12" cy="12" r="3.2" fill="#4285F4" />
+          </svg>
+        </div>
+        <div class="icon-label">Chrome</div>
+      </div>
+
+      <!-- 2. Gallery Hub -->
+      <div class="desktop-icon" onclick="toggleWindow('win-gallery')">
+        <div class="icon-wrapper gallery-icon">
+          <svg viewBox="0 0 48 48" width="32" height="32" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M4 10a3 3 0 013-3h11.172a3 3 0 012.121.879l3.414 3.414a3 3 0 002.121.879H41a3 3 0 013 3v24a3 3 0 01-3 3H7a3 3 0 01-3-3V10z" fill="url(#folder-back)" />
+            <path d="M4 18h40v20a3 3 0 01-3 3H7a3 3 0 01-3-3V18z" fill="url(#folder-front)" />
+            <path d="M10 12h28v10H10z" fill="#FFF" opacity="0.8" rx="1" />
+            <path d="M14 18l5-4 6 5 8-7 4 4v1H14v-4z" fill="url(#folder-picture)" />
+            <defs>
+              <linearGradient id="folder-back" x1="24" y1="7" x2="24" y2="41" gradientUnits="userSpaceOnUse">
+                <stop stop-color="#FFE082" />
+                <stop offset="1" stop-color="#FFB300" />
+              </linearGradient>
+              <linearGradient id="folder-front" x1="24" y1="18" x2="24" y2="41" gradientUnits="userSpaceOnUse">
+                <stop stop-color="#FFCA28" />
+                <stop offset="1" stop-color="#FFA000" />
+              </linearGradient>
+              <linearGradient id="folder-picture" x1="24" y1="12" x2="24" y2="22" gradientUnits="userSpaceOnUse">
+                <stop stop-color="#29B6F6" />
+                <stop offset="1" stop-color="#0288D1" />
+              </linearGradient>
+            </defs>
+          </svg>
+        </div>
+        <div class="icon-label">Gallery Hub</div>
+      </div>
+
+      <!-- 3. Hackatime -->
+      <div class="desktop-icon" onclick="openHackatimeWorkspace()">
+        <div class="icon-wrapper hackatime-main-icon">
+          <svg viewBox="0 0 48 48" width="32" height="32" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect x="6" y="6" width="36" height="36" rx="8" fill="url(#hack-main-bg)" />
+            <!-- Glowing code block mock -->
+            <path d="M14 20l6 6-6 6M20 28h14" stroke="#D7FF6A" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" />
+            <circle cx="36" cy="12" r="3" fill="#D7FF6A" />
+            <defs>
+              <linearGradient id="hack-main-bg" x1="24" y1="6" x2="24" y2="42" gradientUnits="userSpaceOnUse">
+                <stop stop-color="#0F172A" />
+                <stop offset="1" stop-color="#1E293B" />
+              </linearGradient>
+            </defs>
+          </svg>
+        </div>
+        <div class="icon-label">Hackatime</div>
+      </div>
+
+      <!-- 4. Weather HUD -->
+      <div class="desktop-icon" onclick="toggleWindow('win-weather')">
+        <div class="icon-wrapper weather-icon">
+          <svg viewBox="0 0 48 48" width="32" height="32" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="30" cy="18" r="10" fill="url(#sun-gradient)" />
+            <path d="M30 4v4M30 28v4M16 18h4M40 18h4M20.1 8.1l2.8 2.8M37.1 25.1l2.8 2.8M20.1 27.9l2.8-2.8M37.1 10.9l2.8-2.8" stroke="#FFA000" stroke-width="2.5" stroke-linecap="round" />
+            <path d="M14 38a8 8 0 01-2.5-15.6 11 11 0 0121-3.4 9 9 0 018.5 10A9 9 0 0132 38H14z" fill="url(#cloud-gradient)" filter="url(#cloud-shadow)" />
+            <defs>
+              <linearGradient id="sun-gradient" x1="30" y1="8" x2="30" y2="28" gradientUnits="userSpaceOnUse">
+                <stop stop-color="#FFD54F" />
+                <stop offset="1" stop-color="#FF8F00" />
+              </linearGradient>
+              <linearGradient id="cloud-gradient" x1="22" y1="16" x2="22" y2="38" gradientUnits="userSpaceOnUse">
+                <stop stop-color="#FFFFFF" />
+                <stop offset="1" stop-color="#B0BEC5" />
+              </linearGradient>
+              <filter id="cloud-shadow" x="-10%" y="-10%" width="120%" height="120%">
+                <feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="#000" flood-opacity="0.3" />
+              </filter>
+            </defs>
+          </svg>
+        </div>
+        <div class="icon-label">Weather HUD</div>
+      </div>
+
+      <!-- 5. Settings -->
+      <div class="desktop-icon" onclick="toggleWindow('win-settings')">
+        <div class="icon-wrapper settings-icon">
+          <svg viewBox="0 0 48 48" width="32" height="32" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path fill-rule="evenodd" clip-rule="evenodd" d="M24 14c-5.523 0-10 4.477-10 10s4.477 10 10 10 10-4.477 10-10-4.477-10-10-10zm-6 10c0-3.314 2.686-6 6-6s6 2.686 6 6-2.686 6-6 6-6-2.686-6-6z" fill="url(#gear-center)" />
+            <path fill-rule="evenodd" clip-rule="evenodd" d="M26.242 4.298a3 3 0 00-4.484 0l-.823.896a2 2 0 01-2.483.473l-1.077-.577a3 3 0 00-4.041 1.674l-.443 1.14a2 2 0 01-2.008 1.25l-1.218-.088a3 3 0 00-3.155 2.766l-.117 1.219a2 2 0 01-1.25 1.74l-1.14.443a3 3 0 00-1.674 4.041l.577 1.077a2 2 0 01-.473 2.483l-.896.823a3 3 0 000 4.484l.896.823a2 2 0 01.473 2.483l-.577 1.077a3 3 0 001.674 4.041l1.14.443a2 2 0 011.25 1.74l.117 1.219a3 3 0 003.155 2.766l1.218-.088a2 2 0 012.008 1.25l.443 1.14a3 3 0 004.041 1.674l1.077-.577a2 2 0 012.483-.473l.823.896a3 3 0 004.484 0l.823-.896a2 2 0 012.483-.473l1.077.577a3 3 0 004.041-1.674l.443-1.14a2 2 0 012.008-1.25l1.218.088a3 3 0 003.155-2.766l.117-1.219a2 2 0 011.25-1.74l1.14-.443a3 3 0 001.674-4.041l-.577-1.077a2 2 0 01.473-2.483l.896-.823a3 3 0 000-4.484l-.896-.823a2 2 0 01-.473-2.483l.577-1.077a3 3 0 00-1.674-4.041l-1.14-.443a2 2 0 01-1.25-1.74l-.117-1.219a3 3 0 00-3.155-2.766l-1.218.088a2 2 0 01-2.008-1.25l-.443-1.14a3 3 0 00-4.041-1.674l-1.077.577a2 2 0 01-2.483-.473l-.823-.896z" fill="url(#gear-body)" />
+            <defs>
+              <linearGradient id="gear-body" x1="24" y1="2" x2="24" y2="46" gradientUnits="userSpaceOnUse">
+                <stop stop-color="#90CAF9" />
+                <stop offset="1" stop-color="#1E88E5" />
+              </linearGradient>
+              <linearGradient id="gear-center" x1="24" y1="14" x2="24" y2="34" gradientUnits="userSpaceOnUse">
+                <stop stop-color="#E3F2FD" />
+                <stop offset="1" stop-color="#90CAF9" />
+              </linearGradient>
+            </defs>
+          </svg>
+        </div>
+        <div class="icon-label">Settings</div>
+      </div>
+
+      <!-- 6. Socials Hub -->
+      <div class="desktop-icon" onclick="toggleWindow('win-socials')">
+        <div class="icon-wrapper socials-icon">
+          <svg viewBox="0 0 48 48" width="32" height="32" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="24" cy="16" r="8" fill="url(#people-head-1)" />
+            <path d="M10 38c0-7.732 6.268-14 14-14s14 6.268 14 14H10z" fill="url(#people-body-1)" />
+            <circle cx="14" cy="20" r="6" fill="url(#people-head-2)" opacity="0.8" />
+            <path d="M4 36c0-6 4-10 10-10s10 4 10 10H4z" fill="url(#people-body-2)" opacity="0.8" />
+            <defs>
+              <linearGradient id="people-head-1" x1="24" y1="8" x2="24" y2="24" gradientUnits="userSpaceOnUse">
+                <stop stop-color="#42A5F5" />
+                <stop offset="1" stop-color="#1565C0" />
+              </linearGradient>
+              <linearGradient id="people-body-1" x1="24" y1="24" x2="24" y2="38" gradientUnits="userSpaceOnUse">
+                <stop stop-color="#1E88E5" />
+                <stop offset="1" stop-color="#0D47A1" />
+              </linearGradient>
+              <linearGradient id="people-head-2" x1="14" y1="14" x2="14" y2="26" gradientUnits="userSpaceOnUse">
+                <stop stop-color="#90CAF9" />
+                <stop offset="1" stop-color="#42A5F5" />
+              </linearGradient>
+              <linearGradient id="people-body-2" x1="14" y1="26" x2="14" y2="36" gradientUnits="userSpaceOnUse">
+                <stop stop-color="#42A5F5" />
+                <stop offset="1" stop-color="#1565C0" />
+              </linearGradient>
+            </defs>
+          </svg>
+        </div>
+        <div class="icon-label">Socials Hub</div>
+      </div>
+
+      <!-- 7. Terminal -->
+      <div class="desktop-icon" onclick="toggleWindow('win-terminal')">
+        <div class="icon-wrapper terminal-icon">
+          <svg viewBox="0 0 48 48" width="32" height="32" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M42 41H6a3 3 0 01-3-3V10a3 3 0 013-3h36a3 3 0 013 3v28a3 3 0 01-3 3z" fill="url(#term-bg)" />
+            <path d="M3 13.5h42V10a3 3 0 00-3-3H6a3 3 0 00-3 3v3.5z" fill="url(#term-header)" />
+            <circle cx="7" cy="10" r="1.5" fill="#FF5F56" />
+            <circle cx="12" cy="10" r="1.5" fill="#FFBD2E" />
+            <circle cx="17" cy="10" r="1.5" fill="#27C93F" />
+            <path d="M12 20L18 25L12 30" stroke="#4FD8E8" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
+            <line x1="20" y1="30" x2="32" y2="30" stroke="#FFFFFF" stroke-width="3" stroke-linecap="round" />
+            <defs>
+              <linearGradient id="term-bg" x1="24" y1="7" x2="24" y2="41" gradientUnits="userSpaceOnUse">
+                <stop stop-color="#1E1E24" />
+                <stop offset="1" stop-color="#0F0F12" />
+              </linearGradient>
+              <linearGradient id="term-header" x1="24" y1="7" x2="24" y2="13.5" gradientUnits="userSpaceOnUse">
+                <stop stop-color="#2D2D37" />
+                <stop offset="1" stop-color="#202029" />
+              </linearGradient>
+            </defs>
+          </svg>
+        </div>
+        <div class="icon-label">Terminal</div>
+      </div>
+
+      <!-- 8. Calculator -->
+      <div class="desktop-icon" onclick="toggleWindow('win-calculator')">
+        <div class="icon-wrapper calculator-icon">
+          <svg viewBox="0 0 48 48" width="32" height="32" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect x="6" y="6" width="36" height="36" rx="4" fill="url(#calc-bg)" />
+            <!-- Screen area -->
+            <rect x="10" y="10" width="28" height="8" rx="1.5" fill="#1C1F2E" />
+            <!-- Keypad grid indicators -->
+            <circle cx="14" cy="24" r="2" fill="#4FD8E8" />
+            <circle cx="24" cy="24" r="2" fill="#E2E8F0" />
+            <circle cx="34" cy="24" r="2" fill="#E2E8F0" />
+            <circle cx="14" cy="30" r="2" fill="#E2E8F0" />
+            <circle cx="24" cy="30" r="2" fill="#E2E8F0" />
+            <circle cx="34" cy="30" r="2" fill="#E2E8F0" />
+            <circle cx="14" cy="36" r="2" fill="#E2E8F0" />
+            <circle cx="24" cy="36" r="2" fill="#E2E8F0" />
+            <!-- Action keys -->
+            <rect x="31" y="33" width="6" height="5" rx="1" fill="#FF2F8E" />
+            <defs>
+              <linearGradient id="calc-bg" x1="24" y1="6" x2="24" y2="42" gradientUnits="userSpaceOnUse">
+                <stop stop-color="#4285F4" />
+                <stop offset="1" stop-color="#1565C0" />
+              </linearGradient>
+            </defs>
+          </svg>
+        </div>
+        <div class="icon-label">Calculator</div>
+      </div>
+
+      <!-- 9. J.A.R.V.I.S. -->
+      <div class="desktop-icon" onclick="toggleWindow('win-jarvis')">
+        <div class="icon-wrapper jarvis-icon">
+          <svg viewBox="0 0 48 48" width="32" height="32" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M12 24C12 14 18 8 24 8s12 6 12 16-6 16-12 16-12-6-12-16z" fill="url(#copilot-grad-1)" />
+            <path d="M24 12c-6.627 0-12 5.373-12 12s5.373 12 12 12c4 0 8-3 8-7s-4-7-8-7-8-3-8-7 4-7 8-7z" fill="url(#copilot-grad-2)" opacity="0.85" />
+            <defs>
+              <linearGradient id="copilot-grad-1" x1="24" y1="8" x2="24" y2="40" gradientUnits="userSpaceOnUse">
+                <stop stop-color="#00FFC4" />
+                <stop offset="0.5" stop-color="#00A2FF" />
+                <stop offset="1" stop-color="#7F00FF" />
+              </linearGradient>
+              <linearGradient id="copilot-grad-2" x1="24" y1="12" x2="24" y2="36" gradientUnits="userSpaceOnUse">
+                <stop stop-color="#FF007F" />
+                <stop offset="1" stop-color="#7F00FF" />
+              </linearGradient>
+            </defs>
+          </svg>
+        </div>
+        <div class="icon-label">J.A.R.V.I.S.</div>
+      </div>
+    </main>
+
+
+    <div class="hud-desktop-widgets">
+
+      <div class="hud-widget clock-widget">
+        <div class="analog-clock">
+          <div class="hand hour-hand" id="analog-hour"></div>
+          <div class="hand min-hand" id="analog-min"></div>
+          <div class="hand sec-hand" id="analog-sec"></div>
+          <div class="clock-center"></div>
+        </div>
+        <div class="digital-time" id="widget-digital-time">12:00:00 AM</div>
+      </div>
+
+
+      <div class="hud-widget calendar-widget">
+        <div class="calendar-header">
+          <span id="calendar-month-year">July 2026</span>
+        </div>
+        <div class="calendar-days-grid">
