@@ -1446,8 +1446,11 @@ function fetchHackatimeData() {
   const statsLoader = document.getElementById("hack-stats-loader");
   const statsContent = document.getElementById("hack-stats-content");
 
+  const isLocal = location.hostname === "localhost" || location.hostname === "127.0.0.1";
+  const apiBase = isLocal ? "http://localhost:3001/api" : "/.netlify/functions";
+
   // 1. Fetch Stats
-  fetch("http://localhost:3001/api/stats")
+  fetch(`${apiBase}/stats`)
     .then(res => res.json())
     .then(data => {
       myHackatimeStats = data;
@@ -1559,7 +1562,7 @@ function fetchHackatimeData() {
   const lbLoader = document.getElementById("hack-lb-loader");
   const lbTable = document.getElementById("hack-lb-table");
 
-  fetch("http://localhost:3001/api/leaderboard")
+  fetch(`${apiBase}/leaderboard`)
     .then(res => res.json())
     .then(data => {
       if (lbLoader) lbLoader.style.display = "none";
