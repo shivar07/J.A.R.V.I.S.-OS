@@ -1404,7 +1404,39 @@ let leaderboardEntries = [];
 let activeScope = "global";
 
 function openHackatimeWorkspace() {
-  toggleWindow('win-hackatime-stats');
+  const statsWin = document.getElementById("win-hackatime-stats");
+  const lbWin = document.getElementById("win-hackatime-leaderboard");
+
+  if (!statsWin || !lbWin) return;
+
+  const statsClosed = statsWin.style.display === "none" || statsWin.style.display === "";
+  const lbClosed = lbWin.style.display === "none" || lbWin.style.display === "";
+
+  if (statsClosed || lbClosed) {
+    statsWin.style.display = "flex";
+    lbWin.style.display = "flex";
+    
+    statsWin.style.zIndex = highestZ++;
+    lbWin.style.zIndex = highestZ++;
+    focusWindow(lbWin);
+
+    const statsInd = document.getElementById("indicator-win-hackatime-stats") || document.getElementById("indicator-workspace-hackatime");
+    const lbInd = document.getElementById("indicator-win-hackatime-leaderboard");
+    if (statsInd) statsInd.parentElement.classList.add("app-open");
+    if (lbInd) lbInd.parentElement.classList.add("app-open");
+
+    if (typeof synthSound === "function") synthSound("success");
+  } else {
+    statsWin.style.display = "none";
+    lbWin.style.display = "none";
+
+    const statsInd = document.getElementById("indicator-win-hackatime-stats") || document.getElementById("indicator-workspace-hackatime");
+    const lbInd = document.getElementById("indicator-win-hackatime-leaderboard");
+    if (statsInd) statsInd.parentElement.classList.remove("app-open");
+    if (lbInd) lbInd.parentElement.classList.remove("app-open");
+
+    if (typeof synthSound === "function") synthSound("click");
+  }
 }
 
 function initHackatime() {
