@@ -1,5 +1,3 @@
-// startup sine note oscillator arrays
-// welcome greeting speak callbacks
 
 
 let audioMuted = localStorage.getItem("system-audio") === "off";

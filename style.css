@@ -1,8 +1,3 @@
-/* leaderboards flex columns details */
-/* weather metrics split layouts variables */
-/* added active neon dots under taskbar apps */
-/* adjusted calculator screen glassmorphic values */
-/* optimized background wallpaper dimensions */
 @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;800;900&family=Rajdhani:wght@500;600;700&family=Share+Tech+Mono&display=swap');
 
 :root {
@@ -3987,4 +3982,4 @@ body {
   border-radius: 50%;
   border: 1px solid rgba(255, 255, 255, 0.1);
 }
-
+
