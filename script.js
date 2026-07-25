@@ -1,3 +1,4 @@
+// unlocks web audio engine on sign in click
 // highlights active rank item with neon glow
 // fetch stats from proxy port 3001
 // render daily forecast forecasts loop
