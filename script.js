@@ -1568,7 +1568,7 @@ function fetchHackatimeData() {
       if (lbLoader) lbLoader.style.display = "none";
       if (lbTable) lbTable.style.display = "table";
 
-      const entriesData = data.props?.entries?.entries || [];
+      const entriesData = data.props?.entries?.data || data.props?.entries?.entries || [];
       leaderboardEntries = entriesData;
       renderLeaderboard();
     })

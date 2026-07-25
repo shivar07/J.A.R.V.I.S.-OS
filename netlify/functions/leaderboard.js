@@ -2,47 +2,39 @@ const https = require('https');
 
 exports.handler = async function(event, context) {
   return new Promise((resolve, reject) => {
-    const url = "https://hackatime.hackclub.com/leaderboard";
+    const url = "https://api.allorigins.win/raw?url=https://hackatime.hackclub.com/leaderboard";
     const req = https.get(url, {
       headers: { 'User-Agent': 'Mozilla/5.0' }
     }, (res) => {
       let html = '';
       res.on('data', chunk => html += chunk);
       res.on('end', () => {
-        const versionMatch = html.match(/"version"\s*:\s*"([a-f0-9]+)"/);
-        const version = versionMatch ? versionMatch[1] : "3dc95e9806593cd91a7e757137df9aa3ffad6a30";
-
-        // Fetch Inertia JSON elements
-        const reqApi = https.get(url, {
-          headers: {
-            'User-Agent': 'Mozilla/5.0',
-            'X-Inertia': 'true',
-            'X-Inertia-Version': version,
-            'X-Inertia-Partial-Component': 'Leaderboards/Index',
-            'X-Inertia-Partial-Data': 'entries'
-          }
-        }, (resApi) => {
-          let dataJson = '';
-          resApi.on('data', chunk => dataJson += chunk);
-          resApi.on('end', () => {
+        const scriptMatch = html.match(/<script data-page="app" type="application/json">([\s\S]*?)<\/script>/);
+        if (scriptMatch) {
+          try {
+            const data = JSON.parse(scriptMatch[1]);
             resolve({
               statusCode: 200,
               headers: {
                 'Content-Type': 'application/json',
                 'Access-Control-Allow-Origin': '*'
               },
-              body: dataJson
+              body: JSON.stringify(data)
             });
-          });
-        });
-
-        reqApi.on('error', (e) => {
+          } catch (e) {
+            resolve({
+              statusCode: 500,
+              headers: { 'Access-Control-Allow-Origin': '*' },
+              body: JSON.stringify({ error: 'Failed to parse JSON: ' + e.message })
+            });
+          }
+        } else {
           resolve({
             statusCode: 500,
             headers: { 'Access-Control-Allow-Origin': '*' },
-            body: JSON.stringify({ error: e.message })
+            body: JSON.stringify({ error: 'Inertia script tag not found' })
           });
-        });
+        }
       });
     });
 
