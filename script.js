@@ -652,6 +652,13 @@ function triggerTerminalBootLogs() {
       setTimeout(printLine, 180 + Math.random() * 100);
     } else {
       setTimeout(() => {
+        // Hide terminal window and update taskbar indicator
+        if (win) win.style.display = "none";
+        const indicator = document.getElementById("indicator-win-terminal");
+        if (indicator) {
+          const dockItem = indicator.parentElement;
+          if (dockItem) dockItem.classList.remove("app-open");
+        }
         triggerStartupWelcome();
       }, 1000);
     }
@@ -1678,6 +1685,9 @@ function initMusicPromptHandlers() {
       
       // Design Hub (Gallery) on the right side
       openWindowAt("win-gallery", "40px", "calc(100% - 640px)", "620px", "82vh");
+
+      // Terminal window on the left side
+      openWindowAt("win-terminal", "40px", "20px", "620px", "82vh");
 
       // Start playing music!
       playFirstTrack();
