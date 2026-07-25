@@ -586,7 +586,9 @@ function initBootSequence() {
         desktopArea.style.display = "block";
         setTimeout(() => {
           desktopArea.style.opacity = "1";
-          triggerStartupWelcome();
+          // Open terminal on the left and run boot logs first
+          openWindowAt("win-terminal", "40px", "20px", "620px", "82vh");
+          triggerTerminalBootLogs();
         }, 50);
       }
       
@@ -650,22 +652,8 @@ function triggerTerminalBootLogs() {
       setTimeout(printLine, 180 + Math.random() * 100);
     } else {
       setTimeout(() => {
-        
-        win.style.display = "none";
-        
-        
-        const showcaseWin = document.getElementById("win-showcase");
-        if (showcaseWin) {
-          showcaseWin.style.display = "flex";
-          showcaseWin.style.zIndex = highestZ++;
-          
-          if (typeof jarvisSpeak === "function") {
-            setTimeout(() => {
-              jarvisSpeak("Welcome back, Sujay. Your awards and honors cabinet is loaded, and system core temperature is nominal.");
-            }, 600);
-          }
-        }
-      }, 1200);
+        triggerStartupWelcome();
+      }, 1000);
     }
   }
 
@@ -1690,10 +1678,6 @@ function initMusicPromptHandlers() {
       
       // Design Hub (Gallery) on the right side
       openWindowAt("win-gallery", "40px", "calc(100% - 640px)", "620px", "82vh");
-      
-      // Terminal on the left side (and print boot logs!)
-      openWindowAt("win-terminal", "40px", "20px", "620px", "82vh");
-      triggerTerminalBootLogs();
 
       // Start playing music!
       playFirstTrack();
