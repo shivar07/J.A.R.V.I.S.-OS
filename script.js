@@ -1,3 +1,4 @@
+// highlights active rank item with neon glow
 // fetch stats from proxy port 3001
 // render daily forecast forecasts loop
 // alert warning thresholds checks
