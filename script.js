@@ -1404,6 +1404,7 @@ function fetchWeather(lat, lon, displayCity) {
 // --- Hackatime Integration Logic ---
 let leaderboardEntries = [];
 let activeScope = "global";
+let myHackatimeStats = null;
 
 function openHackatimeWorkspace() {
   const statsWin = document.getElementById("win-hackatime-stats");
@@ -1441,7 +1442,7 @@ function openHackatimeWorkspace() {
   }
 }
 
-function initHackatime() {
+function fetchHackatimeData() {
   const statsLoader = document.getElementById("hack-stats-loader");
   const statsContent = document.getElementById("hack-stats-content");
 
@@ -1449,6 +1450,7 @@ function initHackatime() {
   fetch("http://localhost:3001/api/stats")
     .then(res => res.json())
     .then(data => {
+      myHackatimeStats = data;
       if (statsLoader) statsLoader.style.display = "none";
       if (statsContent) statsContent.style.display = "block";
 
@@ -1542,6 +1544,11 @@ function initHackatime() {
           languagesGrid.appendChild(barWrapper);
         });
       }
+
+      // Re-trigger leaderboard rendering to inject correct sorted stats
+      if (leaderboardEntries.length > 0) {
+        renderLeaderboard();
+      }
     })
     .catch(err => {
       console.error("Error loading Hackatime stats:", err);
@@ -1566,6 +1573,14 @@ function initHackatime() {
       console.error("Error loading Leaderboard:", err);
       if (lbLoader) lbLoader.textContent = "Offline or proxy disconnected.";
     });
+}
+
+function initHackatime() {
+  // First load
+  fetchHackatimeData();
+
+  // Auto-refresh every 2 minutes
+  setInterval(fetchHackatimeData, 120000);
 
   // Hook filters
   const scopeGlobal = document.getElementById("lb-scope-global");
@@ -1607,8 +1622,25 @@ function renderLeaderboard() {
   const query = searchInput ? searchInput.value.toLowerCase().trim() : "";
 
   // Filter list
-  let filtered = leaderboardEntries;
+  let filtered = [...leaderboardEntries];
   
+  // Inject myself dynamically if not already in the array
+  const meExists = filtered.some(entry => entry.user?.display_name?.toLowerCase() === "shivar07" || entry.user?.display_name?.toLowerCase() === "sujay");
+  if (!meExists && myHackatimeStats) {
+    const profile = myHackatimeStats.profile || {};
+    const dashboard = myHackatimeStats.dashboard_stats?.filterable_dashboard_data || {};
+    const myEntry = {
+      user: {
+        display_name: profile.display_name || "shivar07",
+        avatar_url: profile.avatar_url || "image/me.png",
+        country_code: profile.country_code || "IN"
+      },
+      streak_count: profile.streak_days || 2,
+      total_seconds: dashboard.total_time || 53280
+    };
+    filtered.push(myEntry);
+  }
+
   // Filter country scope
   if (activeScope === "india") {
     filtered = filtered.filter(entry => entry.user?.country_code === "IN");
@@ -1619,6 +1651,9 @@ function renderLeaderboard() {
     filtered = filtered.filter(entry => entry.user?.display_name?.toLowerCase().includes(query));
   }
 
+  // Always re-sort the filtered list descending by seconds to establish correct rank
+  filtered.sort((a, b) => b.total_seconds - a.total_seconds);
+
   const displayList = filtered.slice(0, 100);
 
   if (displayList.length === 0) {
@@ -1627,7 +1662,7 @@ function renderLeaderboard() {
   }
 
   displayList.forEach((entry, idx) => {
-    const isMe = entry.user?.display_name === "shivar07";
+    const isMe = entry.user?.display_name?.toLowerCase() === "shivar07" || entry.user?.display_name?.toLowerCase() === "sujay";
     const userAvatar = entry.user?.avatar_url || "image/me.png";
     const userName = entry.user?.display_name || "Anonymous";
     const country = entry.user?.country_code || "UN";
@@ -1639,8 +1674,9 @@ function renderLeaderboard() {
 
     const tr = document.createElement("tr");
     if (isMe) {
-      tr.style.background = "rgba(79, 216, 232, 0.12)";
-      tr.style.borderLeft = "3px solid var(--primary)";
+      tr.style.background = "rgba(255, 47, 142, 0.16)";
+      tr.style.borderLeft = "3px solid #ff2f8e";
+      tr.style.boxShadow = "inset 0 0 8px rgba(255, 47, 142, 0.25)";
     }
 
     let rankText = `${idx + 1}`;
