@@ -9,10 +9,28 @@ exports.handler = async function(event, context) {
       let html = '';
       res.on('data', chunk => html += chunk);
       res.on('end', () => {
+        let decodedJson = null;
+        
+        // Option 1: script tag
         const scriptMatch = html.match(/<script data-page="app" type="application/json">([\s\S]*?)<\/script>/);
         if (scriptMatch) {
+          decodedJson = scriptMatch[1];
+        } else {
+          // Option 2: div data-page attribute
+          const divMatch = html.match(/<div id="app" data-page="([\s\S]*?)">/);
+          if (divMatch) {
+            decodedJson = divMatch[1]
+              .replace(/&quot;/g, '"')
+              .replace(/&amp;/g, '&')
+              .replace(/&lt;/g, '<')
+              .replace(/&gt;/g, '>')
+              .replace(/&#39;/g, "'");
+          }
+        }
+
+        if (decodedJson) {
           try {
-            const data = JSON.parse(scriptMatch[1]);
+            const data = JSON.parse(decodedJson);
             const props = data.props || {};
             const result = {
               profile: props.profile || {},
@@ -38,7 +56,7 @@ exports.handler = async function(event, context) {
           resolve({
             statusCode: 500,
             headers: { 'Access-Control-Allow-Origin': '*' },
-            body: JSON.stringify({ error: 'Inertia script tag not found' })
+            body: JSON.stringify({ error: 'Inertia app data payload not found in HTML' })
           });
         }
       });
