@@ -1997,7 +1997,11 @@ function initBrowser() {
 
   if (!tabsList || !viewportsContainer) return;
 
-  let tabs = [];  function createTab(url = "https://html.duckduckgo.com/html/") {
+  let tabs = [];
+  let activeTabId = null;
+  let nextTabId = 1;
+  
+  function createTab(url = "https://html.duckduckgo.com/html/") {
     const tabId = nextTabId++;
     
     let cleanUrl = url;
