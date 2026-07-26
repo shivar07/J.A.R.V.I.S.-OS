@@ -1997,11 +1997,7 @@ function initBrowser() {
 
   if (!tabsList || !viewportsContainer) return;
 
-  let tabs = [];
-  let activeTabId = null;
-  let nextTabId = 1;
-
-  function createTab(url = "https://en.wikipedia.org/wiki/Main_Page") {
+  let tabs = [];  function createTab(url = "https://html.duckduckgo.com/html/") {
     const tabId = nextTabId++;
     
     let cleanUrl = url;
@@ -2009,9 +2005,10 @@ function initBrowser() {
       cleanUrl = "https://" + cleanUrl;
     }
 
-    let tabTitle = "Wikipedia";
+    let tabTitle = "DuckDuckGo";
     try {
-      if (cleanUrl.includes("wikipedia.org")) tabTitle = "Wikipedia";
+      if (cleanUrl.includes("duckduckgo.com")) tabTitle = "DuckDuckGo";
+      else if (cleanUrl.includes("wikipedia.org")) tabTitle = "Wikipedia";
       else {
         const host = new URL(cleanUrl).hostname.replace("www.", "");
         tabTitle = host.charAt(0).toUpperCase() + host.slice(1);
@@ -2154,17 +2151,15 @@ function initBrowser() {
         inputUrl = "https://" + inputUrl;
       }
     } else {
-      // Convert search term to Wikipedia Search query (100% iframe compatible)
-      inputUrl = "https://en.wikipedia.org/wiki/Special:Search?search=" + encodeURIComponent(inputUrl);
+      // Convert search term to DuckDuckGo Search query (open-source, 100% iframe compatible)
+      inputUrl = "https://html.duckduckgo.com/html/?q=" + encodeURIComponent(inputUrl);
     }
 
     tab.url = inputUrl;
     
     try {
-      if (inputUrl.includes("wikipedia.org/wiki/Special:Search")) {
-        tab.title = "Wikipedia Search";
-      } else if (inputUrl.includes("wikipedia.org")) {
-        tab.title = "Wikipedia";
+      if (inputUrl.includes("duckduckgo.com")) {
+        tab.title = "DuckDuckGo Search";
       } else {
         const host = new URL(inputUrl).hostname.replace("www.", "");
         tab.title = host.charAt(0).toUpperCase() + host.slice(1);
@@ -2203,7 +2198,7 @@ function initBrowser() {
   if (homeBtn) {
     homeBtn.addEventListener("click", () => {
       if (activeTabId) {
-        addressInput.value = "https://en.wikipedia.org/wiki/Main_Page";
+        addressInput.value = "https://html.duckduckgo.com/html/";
         navigateActiveTab();
       }
     });
