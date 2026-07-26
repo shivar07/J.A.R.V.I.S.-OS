@@ -2123,14 +2123,6 @@ function initBrowser() {
       <div class="icon">📚</div>
       <div class="title">Open Library</div>
     </a>
-    <a class="card" href="https://www.w3schools.com">
-      <div class="icon">⚡</div>
-      <div class="title">W3Schools</div>
-    </a>
-    <a class="card" href="https://github.com/shivar07/J.A.R.V.I.S.-OS">
-      <div class="icon">🐙</div>
-      <div class="title">GitHub</div>
-    </a>
   </div>
 </body>
 </html>`;
