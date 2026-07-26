@@ -179,6 +179,7 @@ function focusWindow(win) {
 
 function toggleWindow(winId) {
   const win = document.getElementById(winId);
+  if (!win) return;
   const indicator = document.getElementById(`indicator-${winId}`);
   const dockItem = indicator ? indicator.parentElement : null;
 

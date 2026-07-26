@@ -24,3 +24,10 @@ Since this is a lightweight static web app, no complex build tools or compilers 
 2. **Launch the application:**
    - Double-click `index.html` to run it directly in your browser.
    - Alternatively, open the directory in VS Code and run the **Live Server** extension.
+
+---
+
+## 🤖 AI Usage Declaration
+
+AI was used as an assistant to help set up Netlify serverless functions for open-source Hackatime data fetching, handling CORS/redirect logic, and minor UI/code quality fine-tuning.
+
