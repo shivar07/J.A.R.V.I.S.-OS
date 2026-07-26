@@ -287,10 +287,12 @@ function setupSpeechRecognition() {
 }
 
 
-function logDialogue(sender, text) {
+function logDialogue(sender, text, id = null) {
   const dialogueBox = document.getElementById("jarvis-dialogue");
+  if (!dialogueBox) return;
   const bubble = document.createElement("div");
   bubble.className = `jarvis-bubble jarvis-${sender}`;
+  if (id) bubble.id = id;
   
   if (sender === "ai") {
     bubble.style.color = "var(--primary)";
@@ -301,6 +303,47 @@ function logDialogue(sender, text) {
   
   dialogueBox.appendChild(bubble);
   dialogueBox.scrollTop = dialogueBox.scrollHeight;
+}
+
+let GEMINI_API_KEY = localStorage.getItem("GEMINI_API_KEY") || "";
+
+async function queryGeminiAI(userPrompt) {
+  if (!GEMINI_API_KEY) {
+    const keyInput = prompt("Please enter your Google Gemini API key to enable J.A.R.V.I.S. AI intelligence:");
+    if (keyInput && keyInput.trim()) {
+      GEMINI_API_KEY = keyInput.trim();
+      localStorage.setItem("GEMINI_API_KEY", GEMINI_API_KEY);
+    } else {
+      return "Gemini API key is required to access neural core intelligence, sir.";
+    }
+  }
+  const models = ["gemini-2.5-flash", "gemini-2.0-flash"];
+  
+  for (const model of models) {
+    try {
+      const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${GEMINI_API_KEY}`;
+      const res = await fetch(url, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          contents: [
+            {
+              parts: [{ text: "You are J.A.R.V.I.S., Tony Stark's futuristic AI assistant. Answer concisely in 1-3 short sentences with a polite, sophisticated sci-fi tone (addressing the user as 'sir' occasionally). Question: " + userPrompt }]
+            }
+          ]
+        })
+      });
+
+      if (res.ok) {
+        const data = await res.json();
+        const text = data.candidates?.[0]?.content?.parts?.[0]?.text;
+        if (text) return text.trim();
+      }
+    } catch (e) {
+      console.warn(`Gemini model ${model} query failed:`, e);
+    }
+  }
+  return null;
 }
 
 
@@ -420,6 +463,24 @@ function processTextQuery(query) {
     reply(jokes[randIdx]);
   }
   else {
-    reply("Command protocol unmapped. Input directive bypassed to global system lookup.", "error");
+    // Query Google Gemini AI Engine
+    synthSound("scan");
+    const tempBubbleId = "jarvis-thinking-" + Date.now();
+    logDialogue("ai", "⚡ <em>Processing query via neural core...</em>", tempBubbleId);
+    
+    queryGeminiAI(clean).then(aiResponse => {
+      const tempEl = document.getElementById(tempBubbleId);
+      const replyMsg = aiResponse || "I am currently unable to reach the neural core servers, sir. Core protocols remain operational.";
+      
+      if (tempEl) {
+        tempEl.innerHTML = replyMsg;
+      } else {
+        logDialogue("ai", replyMsg);
+      }
+      
+      synthSound("success");
+      const plainMsg = replyMsg.replace(/<[^>]*>/g, "");
+      jarvisSpeak(plainMsg);
+    });
   }
 }

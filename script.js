@@ -2001,7 +2001,7 @@ function initBrowser() {
   let activeTabId = null;
   let nextTabId = 1;
 
-  function createTab(url = "https://www.google.com/webhp?igu=1") {
+  function createTab(url = "https://en.wikipedia.org/wiki/Main_Page") {
     const tabId = nextTabId++;
     
     let cleanUrl = url;
@@ -2009,10 +2009,9 @@ function initBrowser() {
       cleanUrl = "https://" + cleanUrl;
     }
 
-    let tabTitle = "Google";
+    let tabTitle = "Wikipedia";
     try {
-      if (cleanUrl.includes("google.com")) tabTitle = "Google";
-      else if (cleanUrl.includes("wikipedia.org")) tabTitle = "Wikipedia";
+      if (cleanUrl.includes("wikipedia.org")) tabTitle = "Wikipedia";
       else {
         const host = new URL(cleanUrl).hostname.replace("www.", "");
         tabTitle = host.charAt(0).toUpperCase() + host.slice(1);
@@ -2155,17 +2154,17 @@ function initBrowser() {
         inputUrl = "https://" + inputUrl;
       }
     } else {
-      // Convert search term to Google search query
-      inputUrl = "https://www.google.com/search?q=" + encodeURIComponent(inputUrl) + "&igu=1";
+      // Convert search term to Wikipedia Search query (100% iframe compatible)
+      inputUrl = "https://en.wikipedia.org/wiki/Special:Search?search=" + encodeURIComponent(inputUrl);
     }
 
     tab.url = inputUrl;
     
     try {
-      if (inputUrl.includes("google.com/search")) {
-        tab.title = "Google Search";
-      } else if (inputUrl.includes("google.com")) {
-        tab.title = "Google";
+      if (inputUrl.includes("wikipedia.org/wiki/Special:Search")) {
+        tab.title = "Wikipedia Search";
+      } else if (inputUrl.includes("wikipedia.org")) {
+        tab.title = "Wikipedia";
       } else {
         const host = new URL(inputUrl).hostname.replace("www.", "");
         tab.title = host.charAt(0).toUpperCase() + host.slice(1);
@@ -2204,7 +2203,7 @@ function initBrowser() {
   if (homeBtn) {
     homeBtn.addEventListener("click", () => {
       if (activeTabId) {
-        addressInput.value = "https://www.google.com/webhp?igu=1";
+        addressInput.value = "https://en.wikipedia.org/wiki/Main_Page";
         navigateActiveTab();
       }
     });
