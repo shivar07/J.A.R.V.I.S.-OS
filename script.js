@@ -2001,7 +2001,7 @@ function initBrowser() {
   let activeTabId = null;
   let nextTabId = 1;
 
-  function createTab(url = "https://en.wikipedia.org/wiki/Main_Page") {
+  function createTab(url = "https://www.google.com/webhp?igu=1") {
     const tabId = nextTabId++;
     
     let cleanUrl = url;
@@ -2009,10 +2009,22 @@ function initBrowser() {
       cleanUrl = "https://" + cleanUrl;
     }
 
+    let tabTitle = "Google";
+    try {
+      if (cleanUrl.includes("google.com")) tabTitle = "Google";
+      else if (cleanUrl.includes("wikipedia.org")) tabTitle = "Wikipedia";
+      else {
+        const host = new URL(cleanUrl).hostname.replace("www.", "");
+        tabTitle = host.charAt(0).toUpperCase() + host.slice(1);
+      }
+    } catch(e) {
+      tabTitle = "New Tab";
+    }
+
     const tab = {
       id: tabId,
       url: cleanUrl,
-      title: "Wikipedia"
+      title: tabTitle
     };
 
     tabs.push(tab);
@@ -2038,7 +2050,7 @@ function initBrowser() {
     tabEl.style.transition = "background 0.2s";
 
     tabEl.innerHTML = `
-      <span class="tab-title" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis; flex-grow: 1;">Wikipedia</span>
+      <span class="tab-title" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis; flex-grow: 1;">${tabTitle}</span>
       <span class="tab-close" style="font-size: 9px; margin-left: 6px; color: #626b77; font-weight: bold; cursor: pointer; display: flex; align-items: center; justify-content: center; width: 14px; height: 14px; border-radius: 50%; transition: background 0.15s, color 0.15s;">✕</span>
     `;
 
@@ -2135,15 +2147,29 @@ function initBrowser() {
     let inputUrl = addressInput.value.trim();
     if (!inputUrl) return;
 
-    if (!/^https?:\/\//i.test(inputUrl)) {
-      inputUrl = "https://" + inputUrl;
+    // Check if input is a direct URL or a search query
+    const isUrl = /^https?:\/\//i.test(inputUrl) || (inputUrl.includes(".") && !inputUrl.includes(" "));
+
+    if (isUrl) {
+      if (!/^https?:\/\//i.test(inputUrl)) {
+        inputUrl = "https://" + inputUrl;
+      }
+    } else {
+      // Convert search term to Google search query
+      inputUrl = "https://www.google.com/search?q=" + encodeURIComponent(inputUrl) + "&igu=1";
     }
 
     tab.url = inputUrl;
     
     try {
-      const host = new URL(inputUrl).hostname.replace("www.", "");
-      tab.title = host.charAt(0).toUpperCase() + host.slice(1);
+      if (inputUrl.includes("google.com/search")) {
+        tab.title = "Google Search";
+      } else if (inputUrl.includes("google.com")) {
+        tab.title = "Google";
+      } else {
+        const host = new URL(inputUrl).hostname.replace("www.", "");
+        tab.title = host.charAt(0).toUpperCase() + host.slice(1);
+      }
       const tabEl = document.getElementById(`tab-${activeTabId}`);
       if (tabEl) {
         const titleEl = tabEl.querySelector(".tab-title");
@@ -2178,7 +2204,7 @@ function initBrowser() {
   if (homeBtn) {
     homeBtn.addEventListener("click", () => {
       if (activeTabId) {
-        addressInput.value = "https://en.wikipedia.org/wiki/Main_Page";
+        addressInput.value = "https://www.google.com/webhp?igu=1";
         navigateActiveTab();
       }
     });
