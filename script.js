@@ -2001,24 +2001,165 @@ function initBrowser() {
   let activeTabId = null;
   let nextTabId = 1;
   
-  function createTab(url = "https://html.duckduckgo.com/html/") {
+  function getChromeStartPageHtml() {
+    return `<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<style>
+  body {
+    margin: 0;
+    padding: 36px 20px;
+    background: #0f1117;
+    color: #e5e9f0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    text-align: center;
+    box-sizing: border-box;
+  }
+  .header {
+    font-size: 26px;
+    font-weight: 800;
+    background: linear-gradient(135deg, #00f0ff, #ff2f8e);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: 6px;
+    letter-spacing: 1px;
+  }
+  .sub {
+    font-size: 11px;
+    color: #8892b0;
+    margin-bottom: 26px;
+    font-family: monospace;
+  }
+  .search-box {
+    display: flex;
+    max-width: 460px;
+    margin: 0 auto 28px auto;
+    background: #1a1d26;
+    border: 1px solid #2e3444;
+    border-radius: 20px;
+    padding: 4px 6px 4px 16px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+  }
+  .search-box input {
+    flex: 1;
+    background: none;
+    border: none;
+    outline: none;
+    color: #fff;
+    font-size: 13px;
+  }
+  .search-box button {
+    background: #00f0ff;
+    border: none;
+    color: #0f1117;
+    border-radius: 14px;
+    padding: 6px 16px;
+    font-size: 11px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: opacity 0.15s;
+  }
+  .search-box button:hover {
+    opacity: 0.9;
+  }
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+    gap: 14px;
+    max-width: 560px;
+    margin: 0 auto;
+  }
+  .card {
+    background: #161922;
+    border: 1px solid #262c3d;
+    border-radius: 10px;
+    padding: 16px 10px;
+    text-decoration: none;
+    color: #e5e9f0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    transition: transform 0.2s, border-color 0.2s, background 0.2s;
+  }
+  .card:hover {
+    transform: translateY(-3px);
+    border-color: #00f0ff;
+    background: #1f2433;
+  }
+  .icon {
+    font-size: 24px;
+    margin-bottom: 6px;
+  }
+  .title {
+    font-size: 11px;
+    font-weight: 600;
+  }
+</style>
+</head>
+<body>
+  <div class="header">Chrome Web Gateway</div>
+  <div class="sub">Verified Iframe-Compatible Web Telemetry Portal</div>
+  
+  <form class="search-box" onsubmit="event.preventDefault(); var q = document.getElementById('q').value; if(q) window.location.href = 'https://en.wikipedia.org/wiki/Special:Search?search=' + encodeURIComponent(q);">
+    <input type="text" id="q" placeholder="Search Wikipedia encyclopedia..." required>
+    <button type="submit">Search</button>
+  </form>
+
+  <div class="grid">
+    <a class="card" href="https://en.wikipedia.org/wiki/Main_Page">
+      <div class="icon">🌐</div>
+      <div class="title">Wikipedia</div>
+    </a>
+    <a class="card" href="https://hackclub.com">
+      <div class="icon">🚀</div>
+      <div class="title">Hack Club</div>
+    </a>
+    <a class="card" href="https://archive.org">
+      <div class="icon">📜</div>
+      <div class="title">Internet Archive</div>
+    </a>
+    <a class="card" href="https://openlibrary.org">
+      <div class="icon">📚</div>
+      <div class="title">Open Library</div>
+    </a>
+    <a class="card" href="https://www.w3schools.com">
+      <div class="icon">⚡</div>
+      <div class="title">W3Schools</div>
+    </a>
+    <a class="card" href="https://github.com/shivar07/J.A.R.V.I.S.-OS">
+      <div class="icon">🐙</div>
+      <div class="title">GitHub</div>
+    </a>
+  </div>
+</body>
+</html>`;
+  }
+
+  function createTab(url = "chrome://newtab") {
     const tabId = nextTabId++;
     
-    let cleanUrl = url;
-    if (!/^https?:\/\//i.test(cleanUrl)) {
+    let isNewTab = url === "chrome://newtab";
+    let cleanUrl = isNewTab ? "chrome://newtab" : url;
+    if (!isNewTab && !/^https?:\/\//i.test(cleanUrl)) {
       cleanUrl = "https://" + cleanUrl;
     }
 
-    let tabTitle = "DuckDuckGo";
+    let tabTitle = isNewTab ? "New Tab" : "Web Page";
     try {
-      if (cleanUrl.includes("duckduckgo.com")) tabTitle = "DuckDuckGo";
+      if (isNewTab) tabTitle = "New Tab";
       else if (cleanUrl.includes("wikipedia.org")) tabTitle = "Wikipedia";
+      else if (cleanUrl.includes("hackclub.com")) tabTitle = "Hack Club";
+      else if (cleanUrl.includes("archive.org")) tabTitle = "Archive";
+      else if (cleanUrl.includes("openlibrary.org")) tabTitle = "Open Library";
+      else if (cleanUrl.includes("w3schools.com")) tabTitle = "W3Schools";
+      else if (cleanUrl.includes("github.com")) tabTitle = "GitHub";
       else {
         const host = new URL(cleanUrl).hostname.replace("www.", "");
         tabTitle = host.charAt(0).toUpperCase() + host.slice(1);
       }
     } catch(e) {
-      tabTitle = "New Tab";
+      tabTitle = "Web Page";
     }
 
     const tab = {
@@ -2077,7 +2218,11 @@ function initBrowser() {
 
     const iframe = document.createElement("iframe");
     iframe.id = `iframe-${tabId}`;
-    iframe.src = cleanUrl;
+    if (isNewTab) {
+      iframe.srcdoc = getChromeStartPageHtml();
+    } else {
+      iframe.src = cleanUrl;
+    }
     iframe.style.width = "100%";
     iframe.style.height = "100%";
     iframe.style.border = "none";
@@ -2147,23 +2292,11 @@ function initBrowser() {
     let inputUrl = addressInput.value.trim();
     if (!inputUrl) return;
 
-    // Check if input is a direct URL or a search query
-    const isUrl = /^https?:\/\//i.test(inputUrl) || (inputUrl.includes(".") && !inputUrl.includes(" "));
-
-    if (isUrl) {
-      if (!/^https?:\/\//i.test(inputUrl)) {
-        inputUrl = "https://" + inputUrl;
-      }
-    } else {
-      // Convert search term to DuckDuckGo Search query (open-source, 100% iframe compatible)
-      inputUrl = "https://html.duckduckgo.com/html/?q=" + encodeURIComponent(inputUrl);
-    }
-
     tab.url = inputUrl;
     
     try {
-      if (inputUrl.includes("duckduckgo.com")) {
-        tab.title = "DuckDuckGo Search";
+      if (inputUrl === "chrome://newtab") {
+        tab.title = "New Tab";
       } else {
         const host = new URL(inputUrl).hostname.replace("www.", "");
         tab.title = host.charAt(0).toUpperCase() + host.slice(1);
@@ -2179,30 +2312,24 @@ function initBrowser() {
 
     const iframe = document.getElementById(`iframe-${activeTabId}`);
     if (iframe) {
-      iframe.src = inputUrl;
+      if (inputUrl === "chrome://newtab") {
+        iframe.srcdoc = getChromeStartPageHtml();
+      } else {
+        iframe.src = inputUrl;
+      }
     }
-  }
-
-  if (goBtn) {
-    goBtn.addEventListener("click", navigateActiveTab);
-  }
-
-  if (addressInput) {
-    addressInput.addEventListener("keydown", (e) => {
-      if (e.key === "Enter") navigateActiveTab();
-    });
   }
 
   if (newTabBtn) {
     newTabBtn.addEventListener("click", () => {
-      createTab();
+      createTab("chrome://newtab");
     });
   }
 
   if (homeBtn) {
     homeBtn.addEventListener("click", () => {
       if (activeTabId) {
-        addressInput.value = "https://html.duckduckgo.com/html/";
+        addressInput.value = "chrome://newtab";
         navigateActiveTab();
       }
     });
