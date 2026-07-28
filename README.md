@@ -1,44 +1,38 @@
-# shivar07 — Interactive WebOS Portfolio
+## Live Demo
 
-I am a developer and robotics student building an interactive engineering HUD & personal WebOS inspired by Stark Industries and JARVIS.
+https://jarvis-hud-os.netlify.app/
 
-GitHub: https://github.com/shivar07/J.A.R.V.I.S.-OS.git
+## what I built and Why
 
----
+I built a web based desktop environment and personal engineering HUD inspired by JARVIS
+I wanted a cool place to view my Hackatime stats check out my portfolio and have an AI assistant that I can talk to with Voice commands and voice synthesis
 
-## 🎨 Design Inspirations & Sources
+## features
 
-- **Telemetry System:** Powered by the open-source [Hack Club Hackatime](https://github.com/hackclub/hackatime) API.
+- Boot screen boot loop with spinning ring and loading text
+- terminal CLI login handshake requiring startx to load desktop
+- lock screen with transition into the glassmorphic desktop environment
+- music player loaded with 14 songs visualizer and volume controls
+- hackatime console with live coding hour charts and a global leaderboard scraping system
+- built in browser simulator for Wiki pages and Hack Club
+- JARVIS AI chat assistant with Speech synthesis voice responses
 
----
+## how to Run and setup
 
-## 🛠️ Local Setup
+git clone https://github.com/shivar07/J.A.R.V.I.S.-OS.git
 
-Since this is a lightweight static web app, no complex build tools or compilers are needed:
+to make the JARVIS AI work you just need to create a .env file in the root folder and write GEMINI_API_KEY=your_key inside it
 
-1. **Clone the repository:**
-   ```bash
-   git clone https://github.com/shivar07/J.A.R.V.I.S.-OS.git
-   cd J.A.R.V.I.S.-OS
-   ```
-2. **Launch the application:**
-   - Double-click `index.html` to run it directly in your browser.
-   - Alternatively, open the directory in VS Code and run the **Live Server** extension.
+## AI declaration
 
-## ⚙️ Environment Variables & Gemini AI Setup
+I used AI to help set up the netlify serverless functions for fetching the Hackatime leaderboard data and handling CORS redirect logic
 
-To enable real-time J.A.R.V.I.S. AI conversational responses via Google Gemini, set your API key:
+## screenshots
 
-1. **Local Setup:** Create a `.env` file in the project root:
-   ```env
-   GEMINI_API_KEY=your_google_gemini_api_key
-   ```
-2. **Netlify Deployment:** Add `GEMINI_API_KEY` under **Site configuration > Environment variables** in your Netlify dashboard.
+![Boot screen Ring and terminal loading](readme%20images/Screenshot%202026-07-25%20143516.png)
+![Terminal password Handshake and input](readme%20images/Screenshot%202026-07-25%20143718.png)
+![glassmorphic Lock screen view](readme%20images/Screenshot%202026-07-25%20183425.png)
+![Desktop widgets analytics and music Player](readme%20images/Screenshot%202026-07-26%20001935.png)
 
----
-
-## 🤖 AI Usage Declaration
-
-AI was used as an assistant to help set up Netlify serverless functions for open-source Hackatime data fetching, handling CORS/redirect logic, and minor UI/code quality fine-tuning.
 
 
