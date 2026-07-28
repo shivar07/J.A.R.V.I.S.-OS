@@ -25,9 +25,8 @@ I used AI to help set up the netlify serverless functions for fetching the Hacka
 
 ## screenshots
 
+![Desktop widgets analytics and music Player](readme%20images/Screenshot%202026-07-26%20001935.png)
 
 ![Terminal password Handshake and input](readme%20images/Screenshot%202026-07-25%20143718.png)
-
-![Desktop widgets analytics and music Player](readme%20images/Screenshot%202026-07-26%20001935.png)
 
 ![Boot screen Ring and terminal loading](readme%20images/Screenshot%202026-07-25%20143516.png)
