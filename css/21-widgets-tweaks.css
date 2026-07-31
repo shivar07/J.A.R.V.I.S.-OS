@@ -1,0 +1,145 @@
+.search-container-wrap {
+  top: 15px !important;
+}
+
+.desktop-search-container {
+  width: 320px !important;
+  background: rgba(10, 10, 15, 0.8) !important;
+  backdrop-filter: blur(12px) !important;
+  border: 1px solid rgba(79, 216, 232, 0.25) !important;
+  border-radius: 6px !important;
+  padding: 6px 14px !important;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5), 0 0 10px rgba(79, 216, 232, 0.05) !important;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+
+.desktop-search-container:focus-within {
+  border-color: var(--primary) !important;
+  box-shadow: 0 4px 25px rgba(0, 0, 0, 0.65), 0 0 15px rgba(79, 216, 232, 0.35) !important;
+  width: 360px !important; 
+}
+
+#desktop-search-input {
+  font-family: var(--font-mono) !important;
+  font-size: 11px !important;
+  text-transform: uppercase !important;
+  letter-spacing: 1px !important;
+  color: var(--text-main) !important;
+  background: transparent !important;
+  border: none !important;
+  outline: none !important;
+  width: 100% !important;
+}
+
+#desktop-search-input::placeholder {
+  color: rgba(200, 200, 210, 0.4) !important;
+}
+
+.search-icon {
+  color: var(--primary) !important;
+  filter: drop-shadow(0 0 3px var(--primary)) !important;
+  margin-right: 10px !important;
+}
+
+
+.search-results-list {
+  background: rgba(8, 8, 12, 0.95) !important;
+  backdrop-filter: blur(16px) !important;
+  border: 1px solid rgba(79, 216, 232, 0.3) !important;
+  border-radius: 6px !important;
+  margin-top: 8px !important;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.8), 0 0 15px rgba(79, 216, 232, 0.15) !important;
+  padding: 4px 0 !important;
+}
+
+.search-results-list li {
+  font-family: var(--font-mono) !important;
+  font-size: 10px !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.5px !important;
+  padding: 8px 14px !important;
+  color: #c8c8d0 !important;
+  border-bottom: 1px solid rgba(79, 216, 232, 0.05) !important;
+  transition: all 0.2s ease !important;
+}
+
+.search-results-list li:last-child {
+  border-bottom: none !important;
+}
+
+.search-results-list li:hover {
+  background: rgba(79, 216, 232, 0.15) !important;
+  color: #ffffff !important;
+  padding-left: 18px !important; 
+}
+
+/* Linux Console style Boot Screen Styles */
+.bios-boot-screen {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(4, 9, 20, 0.45);
+  backdrop-filter: blur(20px) saturate(1.2);
+  z-index: 99999;
+  display: flex;
+  justify-content: flex-start;
+  align-items: flex-start;
+  color: #dcdcdc;
+  font-family: var(--font-mono);
+  box-sizing: border-box;
+  padding: 30px;
+  overflow: hidden;
+}
+
+.linux-console {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  overflow-y: auto;
+  font-size: 13px;
+  line-height: 1.6;
+  white-space: pre-wrap;
+  box-sizing: border-box;
+}
+
+.linux-console div {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  text-align: left;
+}
+
+/* Custom scrollbar for console */
+.linux-console::-webkit-scrollbar {
+  width: 6px;
+}
+.linux-console::-webkit-scrollbar-track {
+  background: #000000;
+}
+.linux-console::-webkit-scrollbar-thumb {
+  background: #333333;
+  border-radius: 3px;
+}
+
+/* Blinking terminal cursor at the end */
+.console-cursor {
+  display: inline-block;
+  width: 8px;
+  height: 15px;
+  background-color: #dcdcdc;
+  margin-left: 4px;
+  animation: console-blink 1s step-end infinite;
+  vertical-align: middle;
+}
+
+@keyframes console-blink {
+  from, to { background-color: transparent; }
+  50% { background-color: #dcdcdc; }
+}
+
+/* Windows 11 Taskbar Integration & Styling */

@@ -1,0 +1,175 @@
+.reactor-play-btn {
+  position: relative;
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(79, 216, 232, 0.15) 0%, rgba(5,8,16,0.95) 85%);
+  border: 2px solid rgba(79, 216, 232, 0.4);
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0 0 10px rgba(79, 216, 232, 0.2);
+  transition: all 0.3s ease;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.reactor-play-btn:hover {
+  border-color: var(--primary);
+  box-shadow: 0 0 15px rgba(79, 216, 232, 0.5);
+  transform: scale(1.05);
+}
+
+.reactor-play-btn .reactor-ring {
+  position: absolute;
+  top: 4px;
+  left: 4px;
+  right: 4px;
+  bottom: 4px;
+  border: 2px dashed rgba(79, 216, 232, 0.5);
+  border-radius: 50%;
+  animation: reactor-rotate 15s linear infinite;
+}
+
+.reactor-play-btn .reactor-core {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: var(--accent);
+  box-shadow: 0 0 8px var(--accent);
+  transition: all 0.3s ease;
+  z-index: 2;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.reactor-play-btn .pause-symbol {
+  display: none !important;
+}
+
+.reactor-play-btn .play-symbol {
+  display: block !important;
+  margin-left: 1.5px;
+}
+
+/* Playing state overrides */
+.win-music-playing .reactor-play-btn {
+  border-color: var(--primary);
+  box-shadow: 0 0 20px rgba(79, 216, 232, 0.7);
+}
+
+.win-music-playing .reactor-play-btn .reactor-ring {
+  animation-duration: 3s; /* spins super fast when active */
+  border-color: var(--primary);
+}
+
+.win-music-playing .reactor-play-btn .reactor-core {
+  background: var(--primary);
+  box-shadow: 0 0 15px var(--primary);
+  animation: reactor-core-pulse 1.2s ease-in-out infinite alternate;
+}
+
+.win-music-playing .reactor-play-btn .play-symbol {
+  display: none !important;
+}
+
+.win-music-playing .reactor-play-btn .pause-symbol {
+  display: block !important;
+}
+
+.music-playlist-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 12px;
+  background: rgba(255,255,255,0.02);
+  border: 1px solid rgba(79, 216, 232, 0.08);
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.music-playlist-item:hover {
+  background: rgba(79, 216, 232, 0.04);
+  border-color: rgba(79, 216, 232, 0.2);
+  transform: translateX(4px);
+}
+
+.music-playlist-item.active-track {
+  background: rgba(79, 216, 232, 0.08) !important;
+  border-color: var(--primary) !important;
+  box-shadow: 0 0 12px rgba(79, 216, 232, 0.15);
+}
+
+@keyframes reactor-rotate {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@keyframes reactor-core-pulse {
+  0% { transform: scale(0.9); opacity: 0.8; }
+  100% { transform: scale(1.15); opacity: 1; }
+}
+
+/* Holographic Equalizer Bars */
+.music-equalizer .eq-bar {
+  width: 4px;
+  height: 100%;
+  background: var(--primary);
+  box-shadow: 0 0 6px var(--primary);
+  transform: scaleY(0.15);
+  transform-origin: bottom;
+  transition: transform 0.2s ease;
+}
+
+.win-music-playing .music-equalizer .eq-bar-1 { animation: eq-bounce 0.8s ease-in-out infinite alternate; }
+.win-music-playing .music-equalizer .eq-bar-2 { animation: eq-bounce 1.1s ease-in-out infinite alternate; animation-delay: 0.1s; }
+.win-music-playing .music-equalizer .eq-bar-3 { animation: eq-bounce 0.7s ease-in-out infinite alternate; animation-delay: 0.25s; }
+.win-music-playing .music-equalizer .eq-bar-4 { animation: eq-bounce 1.3s ease-in-out infinite alternate; animation-delay: 0.05s; }
+.win-music-playing .music-equalizer .eq-bar-5 { animation: eq-bounce 0.9s ease-in-out infinite alternate; animation-delay: 0.3s; }
+.win-music-playing .music-equalizer .eq-bar-6 { animation: eq-bounce 1.2s ease-in-out infinite alternate; animation-delay: 0.15s; }
+.win-music-playing .music-equalizer .eq-bar-7 { animation: eq-bounce 0.6s ease-in-out infinite alternate; animation-delay: 0.2s; }
+.win-music-playing .music-equalizer .eq-bar-8 { animation: eq-bounce 1.0s ease-in-out infinite alternate; animation-delay: 0.4s; }
+
+@keyframes eq-bounce {
+  0% { transform: scaleY(0.1); }
+  100% { transform: scaleY(0.95); }
+}
+
+/* Custom slider styles for music player */
+#music-progress-slider,
+#music-volume-slider {
+  -webkit-appearance: none;
+  width: 100%;
+  height: 4px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 2px;
+  outline: none;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+#music-progress-slider:hover,
+#music-volume-slider:hover {
+  background: rgba(255, 255, 255, 0.18);
+}
+
+#music-progress-slider::-webkit-slider-thumb,
+#music-volume-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--primary);
+  box-shadow: 0 0 6px var(--primary);
+  cursor: pointer;
+  transition: transform 0.1s ease;
+}
+
+#music-progress-slider::-webkit-slider-thumb:hover,
+#music-volume-slider::-webkit-slider-thumb:hover {
+  transform: scale(1.3);
+}

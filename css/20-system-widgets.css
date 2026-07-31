@@ -1,0 +1,125 @@
+.context-menu {
+  position: absolute;
+  background: rgba(10, 10, 15, 0.88);
+  backdrop-filter: var(--bg-blur);
+  border: 1.5px solid rgba(79, 216, 232, 0.35);
+  box-shadow: var(--shadow-glow), 0 8px 32px rgba(0, 0, 0, 0.8);
+  z-index: 10000;
+  width: 170px;
+  border-radius: 8px;
+  animation: zoom-in-fast 0.15s ease-out;
+}
+
+.context-menu ul {
+  list-style: none;
+  padding: 4px 0;
+  margin: 0;
+}
+
+.context-menu li {
+  padding: 8px 14px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--text-main);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  transition: var(--transition-fast);
+}
+
+.context-menu li:hover {
+  background: rgba(79, 216, 232, 0.15);
+  color: #ffffff;
+}
+
+.context-menu li svg {
+  color: var(--primary);
+  opacity: 0.8;
+}
+
+
+.hud-brand-header {
+  width: 86px;
+  text-align: center;
+  margin-bottom: 8px;
+  border-bottom: 1.5px solid rgba(79, 216, 232, 0.15);
+  padding-bottom: 8px;
+}
+
+.hud-brand-logo {
+  font-family: var(--font-hud);
+  font-size: 10px;
+  font-weight: 900;
+  letter-spacing: 0.5px;
+  color: #ffffff;
+  text-shadow: 0 0 5px var(--primary);
+}
+
+.hud-brand-sub {
+  font-family: var(--font-mono);
+  font-size: 7px;
+  color: var(--accent); 
+  letter-spacing: 0.5px;
+  margin-top: 2px;
+}
+
+
+.battery-pill-indicator {
+  width: 20px;
+  height: 9px;
+  border: 1.5px solid var(--accent); 
+  border-radius: 4px;
+  padding: 0.5px;
+  display: flex;
+  align-items: center;
+  position: relative;
+  box-shadow: 0 0 5px rgba(255, 47, 142, 0.2);
+}
+
+.battery-pill-indicator::after {
+  content: '';
+  position: absolute;
+  right: -2.5px;
+  top: 2px;
+  width: 1.5px;
+  height: 3px;
+  background: var(--accent);
+  border-radius: 0 1px 1px 0;
+}
+
+.battery-fill {
+  height: 100%;
+  background: var(--accent);
+  border-radius: 2px;
+  box-shadow: 0 0 5px var(--accent);
+}
+
+
+.avatar-icon {
+  padding: 0 !important;
+  background: none !important;
+  overflow: hidden !important;
+  border-color: rgba(79, 216, 232, 0.45) !important;
+}
+
+.avatar-icon img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform var(--transition-normal);
+}
+
+.avatar-icon:hover img {
+  transform: scale(1.1);
+}
+
+
+.desktop-dock .dock-item.avatar-icon img {
+  clip-path: polygon(10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%, 0 10px) !important;
+}
+
+
+

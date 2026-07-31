@@ -1,0 +1,80 @@
+.jarvis-core-container {
+  position: relative;
+  width: 120px;
+  height: 120px;
+}
+.jarvis-core-sphere {
+  width: 50px;
+  height: 50px;
+  background: radial-gradient(circle, var(--primary) 0%, rgba(var(--primary-rgb), 0.4) 60%, transparent 100%);
+  border-radius: 50%;
+  box-shadow: var(--shadow-glow), inset 0 0 15px rgba(255,255,255,0.7);
+  animation: sphere-pulse 3s infinite ease-in-out;
+  z-index: 2;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+.jarvis-pulse-ring, .jarvis-pulse-ring2 {
+  position: absolute;
+  width: 100px;
+  height: 100px;
+  border: 1px solid var(--primary);
+  border-radius: 50%;
+  opacity: 0;
+  animation: ring-ripple 3s infinite linear;
+  pointer-events: none;
+}
+.jarvis-pulse-ring2 {
+  animation-delay: 1.5s;
+}
+
+@keyframes sphere-pulse {
+  0% { transform: scale(1); box-shadow: var(--shadow-glow); }
+  50% { transform: scale(1.15); box-shadow: 0 0 25px rgba(var(--primary-rgb), 0.6), inset 0 0 20px rgba(255,255,255,0.85); }
+  100% { transform: scale(1); box-shadow: var(--shadow-glow); }
+}
+@keyframes ring-ripple {
+  0% { transform: scale(0.5); opacity: 0; }
+  10% { opacity: 0.5; }
+  90% { opacity: 0.15; }
+  100% { transform: scale(1.2); opacity: 0; }
+}
+
+
+.jarvis-dialogue::-webkit-scrollbar {
+  width: 6px;
+}
+.jarvis-bubble {
+  padding: 8px 12px;
+  border-radius: 6px;
+  line-height: 1.4;
+  max-width: 85%;
+  word-wrap: break-word;
+}
+.jarvis-bubble.jarvis-ai {
+  background: rgba(var(--primary-rgb), 0.05);
+  border-left: 3px solid var(--primary);
+  align-self: flex-start;
+}
+.jarvis-bubble.jarvis-user {
+  background: rgba(255, 255, 255, 0.03);
+  border-right: 3px solid var(--text-dim);
+  align-self: flex-end;
+  color: var(--text-main);
+  text-align: right;
+}
+.jarvis-voice-btn:hover {
+  background: var(--primary) !important;
+  color: var(--bg-dark) !important;
+  box-shadow: var(--shadow-glow) !important;
+}
+.jarvis-voice-btn.listening-mode {
+  background: #ff5f56 !important;
+  color: white !important;
+  border-color: #ff5f56 !important;
+  animation: pulse-hud 1s infinite !important;
+}
+.jarvis-input:focus {
+  border-color: var(--primary) !important;
+  box-shadow: 0 0 8px rgba(var(--primary-rgb), 0.25) !important;
+}
+

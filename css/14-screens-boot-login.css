@@ -1,0 +1,181 @@
+.boot-screen {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: #030712;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  z-index: 100000;
+  color: #00f0ff;
+  font-family: var(--font-mono);
+  transition: opacity 0.8s ease-out;
+  padding: 20px;
+}
+.boot-screen::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; width: 100%; height: 100%;
+  background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+  background-size: 100% 4px, 6px 100%;
+  z-index: 10;
+  pointer-events: none;
+}
+.boot-logo {
+  margin-bottom: 24px;
+  filter: drop-shadow(0 0 10px rgba(0, 240, 255, 0.5));
+}
+.rot-circle {
+  transform-origin: center;
+  animation: rotate-hud-clock 8s infinite linear;
+}
+.pulse-polygon {
+  transform-origin: center;
+  animation: polygon-glow 2s infinite ease-in-out;
+}
+@keyframes polygon-glow {
+  0%, 100% { fill: rgba(0, 240, 255, 0.3); opacity: 0.5; }
+  50% { fill: rgba(0, 240, 255, 1); opacity: 1; filter: drop-shadow(0 0 8px var(--primary)); }
+}
+@keyframes rotate-hud-clock {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+.boot-title {
+  font-family: var(--font-hud);
+  font-size: 18px;
+  letter-spacing: 3px;
+  font-weight: 800;
+  margin-bottom: 12px;
+  text-shadow: 0 0 8px rgba(0, 240, 255, 0.6);
+}
+.boot-status {
+  font-size: 13px;
+  color: var(--text-dim);
+  margin-bottom: 24px;
+  height: 20px;
+}
+.boot-progress-container {
+  width: 280px;
+  height: 4px;
+  background: rgba(0, 240, 255, 0.1);
+  border-radius: 2px;
+  overflow: hidden;
+  border: 1px solid rgba(0, 240, 255, 0.2);
+}
+.boot-progress-bar {
+  width: 0%;
+  height: 100%;
+  background: var(--primary);
+  box-shadow: 0 0 8px var(--primary);
+  transition: width 0.1s ease;
+}
+
+
+.login-screen {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-image: url('wallpaper/wp11991604-neon-4k-iron-man-wallpapers.jpg');
+  background-size: cover;
+  background-position: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 99999;
+  transition: opacity 0.8s ease;
+}
+.login-screen::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(4, 9, 20, 0.45);
+  backdrop-filter: blur(20px) saturate(1.2);
+  z-index: -1;
+}
+.login-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: rgba(10, 18, 36, 0.6);
+  border: 1px solid rgba(0, 240, 255, 0.2);
+  box-shadow: 0 20px 50px rgba(0,0,0,0.6), 0 0 20px rgba(0, 240, 255, 0.1);
+  padding: 40px;
+  border-radius: 16px;
+  width: 360px;
+  backdrop-filter: blur(8px);
+  text-align: center;
+  animation: zoom-fade-in 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+@keyframes zoom-fade-in {
+  from { opacity: 0; transform: scale(0.92) translateY(10px); }
+  to { opacity: 1; transform: scale(1) translateY(0); }
+}
+.login-avatar-container {
+  width: 110px;
+  height: 110px;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 3px solid var(--primary);
+  box-shadow: 0 0 15px rgba(var(--primary-rgb), 0.4);
+  margin-bottom: 20px;
+  background: #060913;
+  animation: pulse-avatar 3s infinite ease-in-out;
+}
+@keyframes pulse-avatar {
+  0%, 100% { border-color: var(--primary); box-shadow: 0 0 10px rgba(var(--primary-rgb), 0.3); }
+  50% { border-color: #bd00ff; box-shadow: 0 0 20px rgba(189, 0, 255, 0.5); }
+}
+.login-avatar {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.login-username {
+  font-family: var(--font-hud);
+  font-size: 22px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  margin-bottom: 6px;
+  color: var(--text-main);
+  text-shadow: 0 0 5px rgba(255,255,255,0.2);
+}
+.login-subtitle {
+  font-size: 13px;
+  color: var(--text-dim);
+  margin-bottom: 30px;
+  letter-spacing: 0.5px;
+}
+.login-btn {
+  width: 100%;
+  padding: 12px;
+  font-family: var(--font-hud);
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 1.5px;
+  color: var(--primary);
+  background: rgba(var(--primary-rgb), 0.08);
+  border: 1px solid var(--primary);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 0 8px rgba(var(--primary-rgb), 0.1);
+}
+.login-btn:hover {
+  background: var(--primary);
+  color: #030712;
+  box-shadow: 0 0 20px rgba(var(--primary-rgb), 0.4);
+  transform: translateY(-2px);
+}
+.login-btn:active {
+  transform: translateY(0);
+}
+

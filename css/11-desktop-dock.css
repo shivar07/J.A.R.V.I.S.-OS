@@ -1,0 +1,88 @@
+.desktop-dock {
+  position: absolute;
+  bottom: 12px;
+  left: 50%;
+  transform: translateX(-50%);
+  height: 64px;
+  background: rgba(10, 17, 30, 0.7);
+  backdrop-filter: var(--bg-blur);
+  border: 1px solid var(--border-dim);
+  border-radius: 12px;
+  padding: 0 16px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  z-index: 998;
+  box-shadow: var(--shadow-glow), 0 5px 20px rgba(0, 0, 0, 0.6);
+}
+
+.dock-item {
+  width: 48px;
+  height: 48px;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: var(--text-dim);
+  cursor: pointer;
+  transition: var(--transition-fast);
+  position: relative;
+}
+
+.dock-item:hover {
+  background: rgba(var(--primary-rgb), 0.15);
+  border-color: var(--primary);
+  color: var(--primary);
+  transform: translateY(-8px) scale(1.1);
+  box-shadow: var(--shadow-glow);
+}
+
+.dock-item svg {
+  width: 24px;
+  height: 24px;
+}
+
+
+.dock-indicator {
+  position: absolute;
+  bottom: -4px;
+  width: 4px;
+  height: 4px;
+  background-color: var(--primary);
+  border-radius: 50%;
+  box-shadow: var(--shadow-glow);
+  opacity: 0;
+  transition: var(--transition-fast);
+}
+
+.dock-item.app-open .dock-indicator {
+  opacity: 1;
+}
+
+
+.dock-item::before {
+  content: attr(data-tooltip);
+  position: absolute;
+  bottom: 60px;
+  background: rgba(8, 14, 25, 0.9);
+  border: 1px solid var(--border-glow);
+  border-radius: 4px;
+  padding: 4px 8px;
+  font-size: 12px;
+  font-family: var(--font-hud);
+  color: var(--primary);
+  pointer-events: none;
+  white-space: nowrap;
+  opacity: 0;
+  transition: var(--transition-fast);
+  transform: translateY(5px);
+  box-shadow: var(--shadow-glow);
+}
+
+.dock-item:hover::before {
+  opacity: 1;
+  transform: translateY(0);
+}
+

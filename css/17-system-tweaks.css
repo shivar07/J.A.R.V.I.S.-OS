@@ -1,0 +1,187 @@
+.boot-screen {
+  background: #000000 !important; 
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 10000 !important;
+}
+
+.win-boot-logo {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 5px;
+  width: 70px;
+  height: 70px;
+  margin-bottom: 40px;
+  animation: logo-fade-pulse 4s ease-in-out infinite;
+}
+
+.win-logo-square {
+  background: #0078d4; 
+  border-radius: 2px;
+  box-shadow: 0 0 10px rgba(0, 120, 212, 0.4);
+}
+
+.win-loader {
+  position: relative;
+  width: 50px;
+  height: 50px;
+  margin-top: 20px;
+}
+
+.win-loader-dot {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  transform: rotate(225deg);
+  animation: win-orbit 5.5s infinite;
+}
+
+.win-loader-dot::after {
+  content: '';
+  position: absolute;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #ffffff;
+  box-shadow: 0 0 6px #ffffff;
+}
+
+.win-loader-dot:nth-child(2) { animation-delay: 240ms; }
+.win-loader-dot:nth-child(3) { animation-delay: 480ms; }
+.win-loader-dot:nth-child(4) { animation-delay: 720ms; }
+.win-loader-dot:nth-child(5) { animation-delay: 960ms; }
+
+@keyframes win-orbit {
+  0% {
+    transform: rotate(225deg);
+    opacity: 1;
+    animation-timing-function: ease-out;
+  }
+  7% {
+    transform: rotate(345deg);
+    animation-timing-function: linear;
+  }
+  30% {
+    transform: rotate(455deg);
+    animation-timing-function: ease-in-out;
+  }
+  39% {
+    transform: rotate(690deg);
+    animation-timing-function: linear;
+  }
+  70% {
+    transform: rotate(815deg);
+    opacity: 1;
+    animation-timing-function: ease-out;
+  }
+  75% {
+    transform: rotate(945deg);
+    animation-timing-function: ease-out;
+  }
+  76% {
+    transform: rotate(945deg);
+    opacity: 0;
+  }
+  100% {
+    transform: rotate(945deg);
+    opacity: 0;
+  }
+}
+
+@keyframes logo-fade-pulse {
+  0%, 100% { opacity: 0.8; }
+  50% { opacity: 1; }
+}
+
+
+
+
+.desktop-icon:hover {
+  background: rgba(255, 255, 255, 0.1) !important;
+  border-color: rgba(255, 255, 255, 0.15) !important;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15) !important;
+  border-radius: 4px !important;
+}
+
+
+.desktop-icon .icon-label {
+  font-family: var(--font-ui) !important;
+  text-transform: none !important;
+  letter-spacing: 0.5px !important;
+  font-size: 11px !important;
+  color: #ffffff !important;
+  margin-top: 4px !important;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.8) !important;
+}
+
+.desktop-icon:hover .icon-label {
+  color: #ffffff !important;
+}
+
+
+.icon-wrapper {
+  width: 48px !important;
+  height: 48px !important;
+  background: transparent !important;
+  border: none !important;
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+  margin-bottom: 4px !important;
+  box-shadow: none !important;
+  transition: transform 0.2s ease-in-out !important;
+}
+
+
+.desktop-icon:hover .icon-wrapper {
+  transform: scale(1.05) !important;
+}
+
+
+.desktop-dock {
+  background: rgba(10, 10, 15, 0.75) !important;
+  backdrop-filter: blur(25px) saturate(1.5) !important;
+  border: 1.5px solid transparent !important;
+  border-image: linear-gradient(90deg, var(--primary) 0%, var(--accent) 100%) 1 !important;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6) !important;
+  border-radius: 0 !important; 
+}
+
+
+.dock-item {
+  width: 46px !important;
+  height: 46px !important;
+  background: rgba(10, 10, 15, 0.65) !important;
+  border: 1.5px solid rgba(79, 216, 232, 0.15) !important;
+  color: var(--primary) !important;
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3) !important;
+  transition: all 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.25) !important;
+  clip-path: polygon(15% 0%, 85% 0%, 100% 15%, 100% 85%, 85% 100%, 15% 100%, 0% 85%, 0% 15%) !important;
+}
+
+
+.dock-item:hover {
+  transform: translateY(-8px) scale(1.15) !important;
+  border-color: var(--primary) !important;
+  box-shadow: 0 0 15px rgba(79, 216, 232, 0.45) !important;
+  color: #ffffff !important;
+}
+
+
+.dock-item.youtube-icon:hover {
+  border-color: var(--accent) !important;
+  box-shadow: 0 0 15px rgba(255, 47, 142, 0.45) !important;
+}
+
+.dock-indicator {
+  background-color: var(--primary) !important;
+  box-shadow: 0 0 5px var(--primary) !important;
+}
+
+

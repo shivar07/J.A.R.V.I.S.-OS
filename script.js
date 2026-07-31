@@ -1881,12 +1881,22 @@ function initMusicPlayer() {
     });
   }
 
+  let isDraggingProgressSlider = false;
+
   audio.addEventListener("timeupdate", () => {
-    if (audio.duration) {
+    if (audio.duration && !isDraggingProgressSlider) {
       const pct = (audio.currentTime / audio.duration) * 100;
       if (progSlider) progSlider.value = pct;
       if (currTimeEl) currTimeEl.textContent = formatTime(audio.currentTime);
     }
+  });
+
+  audio.addEventListener("seeking", () => {
+    isDraggingProgressSlider = true;
+  });
+
+  audio.addEventListener("seeked", () => {
+    isDraggingProgressSlider = false;
   });
 
   audio.addEventListener("loadedmetadata", () => {
@@ -1901,6 +1911,14 @@ function initMusicPlayer() {
 
   if (progSlider) {
     progSlider.addEventListener("input", () => {
+      isDraggingProgressSlider = true;
+      if (audio.duration && currTimeEl) {
+        currTimeEl.textContent = formatTime((progSlider.value / 100) * audio.duration);
+      }
+    });
+
+    progSlider.addEventListener("change", () => {
+      isDraggingProgressSlider = true;
       if (audio.duration) {
         audio.currentTime = (progSlider.value / 100) * audio.duration;
       }

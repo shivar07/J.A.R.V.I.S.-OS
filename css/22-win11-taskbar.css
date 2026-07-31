@@ -1,0 +1,180 @@
+.win-taskbar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 48px;
+  background: rgba(8, 12, 24, 0.78);
+  backdrop-filter: blur(20px) saturate(1.2);
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 16px;
+  z-index: 100000;
+  box-shadow: 0 -4px 30px rgba(0, 0, 0, 0.5);
+  box-sizing: border-box;
+}
+
+.taskbar-left {
+  display: flex;
+  align-items: center;
+  width: 20%;
+  min-width: 160px;
+}
+
+.taskbar-weather-widget {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: 4px;
+  transition: background 0.2s ease;
+}
+
+.taskbar-weather-widget:hover {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.taskbar-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-grow: 1;
+  gap: 12px;
+}
+
+.taskbar-search-pill {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 16px;
+  padding: 4px 12px;
+  width: 130px;
+  height: 28px;
+  cursor: text;
+  box-sizing: border-box;
+  font-family: var(--font-ui);
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.6);
+  transition: all 0.2s ease;
+}
+
+.taskbar-search-pill:hover {
+  background: rgba(255, 255, 255, 0.12);
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+.taskbar-apps-container {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* Re-use and adapt dock item class for taskbar */
+.win-taskbar .dock-item,
+.win-taskbar .taskbar-item {
+  width: 36px !important;
+  height: 36px !important;
+  background: transparent !important;
+  border: 1px solid transparent !important;
+  border-radius: 4px !important;
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+  cursor: pointer !important;
+  position: relative !important;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1) !important;
+  margin: 0 !important;
+  transform: none !important;
+  box-shadow: none !important;
+}
+
+.win-taskbar .dock-item:hover,
+.win-taskbar .taskbar-item:hover {
+  background: rgba(255, 255, 255, 0.08) !important;
+  transform: translateY(-2px) !important;
+}
+
+.win-taskbar .dock-item:active,
+.win-taskbar .taskbar-item:active {
+  transform: scale(0.92) !important;
+}
+
+.win-taskbar .dock-item svg,
+.win-taskbar .taskbar-item svg {
+  width: 22px !important;
+  height: 22px !important;
+}
+
+/* Modify indicators to be small horizontal bars */
+.win-taskbar .dock-indicator {
+  position: absolute !important;
+  bottom: 2px !important;
+  left: 50% !important;
+  transform: translateX(-50%) !important;
+  width: 6px !important;
+  height: 2px !important;
+  background-color: var(--primary) !important;
+  border-radius: 1px !important;
+  box-shadow: var(--shadow-glow) !important;
+}
+
+.win-taskbar .dock-item::before,
+.win-taskbar .taskbar-item::before {
+  content: attr(data-tooltip) !important;
+  position: absolute !important;
+  bottom: 54px !important;
+  left: 50% !important;
+  transform: translateX(-50%) translateY(5px) !important;
+  background: rgba(8, 14, 25, 0.95) !important;
+  border: 1px solid var(--border-glow) !important;
+  border-radius: 4px !important;
+  padding: 4px 8px !important;
+  font-size: 10px !important;
+  font-family: var(--font-hud) !important;
+  color: var(--primary) !important;
+  pointer-events: none !important;
+  white-space: nowrap !important;
+  opacity: 0 !important;
+  transition: all 0.2s ease !important;
+  box-shadow: var(--shadow-glow) !important;
+  z-index: 101000 !important;
+}
+
+.win-taskbar .dock-item:hover::before,
+.win-taskbar .taskbar-item:hover::before {
+  opacity: 1 !important;
+  transform: translateX(-50%) translateY(0) !important;
+}
+
+.taskbar-right {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  width: 20%;
+  min-width: 160px;
+}
+
+.tray-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  border-radius: 4px;
+  transition: background 0.2s ease;
+}
+
+.tray-icon:hover {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+@keyframes slide-up-win {
+  from { transform: translate(-50%, 20px); opacity: 0; }
+  to { transform: translate(-50%, 0); opacity: 1; }
+}
+
+/* Arc Reactor play button & music styles */

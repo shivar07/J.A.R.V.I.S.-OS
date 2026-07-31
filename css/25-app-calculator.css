@@ -1,0 +1,193 @@
+/* J.A.R.V.I.S. Prompt Modal */
+.jarvis-prompt-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(8, 10, 15, 0.75);
+  backdrop-filter: blur(10px);
+  z-index: 999999;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.jarvis-prompt-box {
+  background: rgba(15, 23, 42, 0.9);
+  border: 2px solid #4fd8e8;
+  border-radius: 12px;
+  width: 90%;
+  max-width: 380px;
+  padding: 24px;
+  box-shadow: 0 0 35px rgba(79, 216, 232, 0.35), inset 0 0 15px rgba(79, 216, 232, 0.15);
+  text-align: center;
+  animation: prompt-pulse-in 0.3s cubic-bezier(0.19, 1, 0.22, 1);
+}
+
+@keyframes prompt-pulse-in {
+  0% { transform: scale(0.85); opacity: 0; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+.jarvis-prompt-header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+
+.jarvis-prompt-logo {
+  font-size: 22px;
+  animation: spin 3s infinite linear;
+}
+
+.jarvis-prompt-title {
+  font-family: var(--font-hud);
+  font-size: 13px;
+  font-weight: bold;
+  color: #4fd8e8;
+  letter-spacing: 2px;
+}
+
+.jarvis-prompt-body p {
+  color: #e2e8f0;
+  font-size: 15px;
+  margin-bottom: 24px;
+  line-height: 1.5;
+  font-family: var(--font-ui);
+}
+
+.jarvis-prompt-actions {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+}
+
+.jarvis-prompt-btn {
+  background: rgba(79, 216, 232, 0.08);
+  border: 1.5px solid #4fd8e8;
+  color: #4fd8e8;
+  border-radius: 6px;
+  padding: 10px 18px;
+  font-family: var(--font-ui);
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  letter-spacing: 0.5px;
+}
+
+.jarvis-prompt-btn.yes {
+  background: #4fd8e8;
+  color: #0f172a;
+}
+
+.jarvis-prompt-btn.yes:hover {
+  background: #33b3c4;
+  box-shadow: 0 0 15px rgba(79, 216, 232, 0.5);
+}
+
+.jarvis-prompt-btn.no:hover {
+  background: rgba(255, 47, 142, 0.15);
+  border-color: #ff2f8e;
+  color: #ff2f8e;
+  box-shadow: 0 0 15px rgba(255, 47, 142, 0.3);
+}
+
+/* Calculator Styles */
+.calculator-screen {
+  background: rgba(10, 15, 30, 0.7);
+  border: 1.5px solid rgba(79, 216, 232, 0.15);
+  border-radius: 8px;
+  padding: 14px 16px;
+  text-align: right;
+  height: 80px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  box-sizing: border-box;
+}
+
+.calculator-formula {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--text-dim);
+  height: 16px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  letter-spacing: 0.5px;
+}
+
+.calculator-display {
+  font-family: var(--font-mono);
+  font-size: 28px;
+  color: #ffffff;
+  font-weight: bold;
+  letter-spacing: 0.5px;
+}
+
+.calculator-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+  flex-grow: 1;
+}
+
+.calc-btn {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1.5px solid rgba(255, 255, 255, 0.08);
+  border-radius: 6px;
+  color: #ffffff;
+  font-size: 16px;
+  font-family: var(--font-ui);
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: all 0.15s ease-in-out;
+  height: 52px;
+  box-sizing: border-box;
+  outline: none;
+}
+
+.calc-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.18);
+  transform: translateY(-1px);
+}
+
+.calc-btn:active {
+  transform: translateY(1px);
+}
+
+.calc-btn.op {
+  color: #4fd8e8;
+  background: rgba(79, 216, 232, 0.08);
+  border-color: rgba(79, 216, 232, 0.18);
+  font-weight: 600;
+}
+
+.calc-btn.op:hover {
+  background: rgba(79, 216, 232, 0.2);
+  border-color: #4fd8e8;
+  box-shadow: 0 0 10px rgba(79, 216, 232, 0.3);
+}
+
+.calc-btn.equals {
+  background: #4fd8e8;
+  border-color: #4fd8e8;
+  color: #0f172a;
+  font-weight: bold;
+}
+
+.calc-btn.equals:hover {
+  background: #33b3c4;
+  border-color: #33b3c4;
+  box-shadow: 0 0 15px rgba(79, 216, 232, 0.6);
+  transform: translateY(-1px);
+}
+
+/* Hackatime App Styles */

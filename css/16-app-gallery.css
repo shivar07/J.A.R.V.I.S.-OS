@@ -1,0 +1,148 @@
+.gallery-sidebar {
+  overflow-y: auto;
+}
+.gallery-folder-btn {
+  width: 100%;
+  padding: 10px 12px;
+  background: transparent;
+  border: none;
+  border-radius: 6px;
+  color: var(--text-dim);
+  font-family: var(--font-ui);
+  font-weight: 600;
+  font-size: 14px;
+  text-align: left;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  transition: all 0.2s ease;
+}
+.gallery-folder-btn:hover {
+  background: rgba(255, 255, 255, 0.03);
+  color: var(--text-main);
+}
+.gallery-folder-btn.active {
+  background: rgba(var(--primary-rgb), 0.1);
+  color: var(--primary);
+  border-left: 3px solid var(--primary);
+}
+.gallery-folder-btn svg {
+  flex-shrink: 0;
+}
+.gallery-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+  gap: 16px;
+}
+.gallery-item-card {
+  background: rgba(10, 20, 38, 0.4);
+  border: 1px solid var(--border-dim);
+  border-radius: 8px;
+  overflow: hidden;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  height: 120px;
+}
+.gallery-item-card:hover {
+  border-color: var(--primary);
+  box-shadow: 0 5px 15px rgba(0,0,0,0.4), 0 0 10px rgba(var(--primary-rgb), 0.25);
+  transform: translateY(-2px);
+}
+.gallery-card-preview {
+  height: 84px;
+  background: #000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  overflow: hidden;
+}
+.gallery-card-preview img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.gallery-card-preview.video-preview::after {
+  content: '▶';
+  position: absolute;
+  font-size: 24px;
+  color: var(--primary);
+  text-shadow: 0 0 12px var(--primary);
+  z-index: 2;
+}
+.gallery-card-label {
+  padding: 6px 8px;
+  font-size: 11px;
+  font-family: var(--font-mono);
+  color: var(--text-dim);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  text-align: center;
+  background: rgba(0,0,0,0.2);
+  flex-grow: 1;
+}
+.gallery-item-card:hover .gallery-card-label {
+  color: var(--primary);
+}
+
+
+.lightbox-modal {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100vw; height: 100vh;
+  background: rgba(3, 6, 12, 0.95);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 110000;
+  animation: fade-in-fast 0.25s ease;
+}
+@keyframes fade-in-fast {
+  from { opacity: 0; } to { opacity: 1; }
+}
+.lightbox-close {
+  position: absolute;
+  top: 20px; right: 30px;
+  color: #fff;
+  font-size: 40px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: color 0.2s ease;
+  z-index: 10;
+}
+.lightbox-close:hover {
+  color: var(--primary);
+}
+.lightbox-content {
+  max-width: 85%;
+  max-height: 80%;
+  border-radius: 8px;
+  border: 1px solid var(--border-glow);
+  box-shadow: 0 0 30px rgba(var(--primary-rgb), 0.3);
+  animation: zoom-in-fast 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+@keyframes zoom-in-fast {
+  from { transform: scale(0.95); } to { transform: scale(1); }
+}
+#lightbox-caption {
+  position: absolute;
+  bottom: 40px;
+  color: var(--text-main);
+  font-family: var(--font-ui);
+  font-size: 16px;
+  text-shadow: 0 2px 4px #000;
+}
+.video-modal-content {
+  width: 720px;
+  max-width: 90%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  animation: zoom-in-fast 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
