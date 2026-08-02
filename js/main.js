@@ -72,6 +72,7 @@ document.addEventListener("DOMContentLoaded", () => {
   initMusicPromptHandlers();
   initMusicPlayer();
   initBrowser();
+  initCalculator();
   initFlyouts();
   
   initBootSequence();
