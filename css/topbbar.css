@@ -4,7 +4,7 @@
   width: 100%;
   background: rgba(8, 12, 24, 0.85) !important;
   backdrop-filter: var(--bg-blur);
-  border-bottom: 1.5px solid rgba(79, 216, 232, 0.25) !important;
+  border-bottom: 1.5px solid #000000 !important;
   display: flex;
   justify-content: space-between;
   align-items: center;

@@ -92,12 +92,18 @@ function initBootSequence() {
     setTimeout(() => {
       if (bootScreen) bootScreen.style.display = "none";
       
+      /*
       runBiosBoot(() => {
         if (loginScreen) {
           loginScreen.style.display = "flex";
           loginScreen.style.opacity = "1";
         }
       });
+      */
+      if (loginScreen) {
+        loginScreen.style.display = "flex";
+        loginScreen.style.opacity = "1";
+      }
     }, 500);
   }, 3500);
 

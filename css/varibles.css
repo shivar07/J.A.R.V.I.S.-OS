@@ -1,22 +1,22 @@
 @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;800;900&family=Rajdhani:wght@500;600;700&family=Share+Tech+Mono&display=swap');
 
 :root {
-  --primary: #4fd8e8;
+  --primary: #ffffff;
   
-  --primary-rgb: 79, 216, 232;
-  --accent: #ff2f8e;
+  --primary-rgb: 255, 255, 255;
+  --accent: #e5c158;
   
   --bg-dark: #0a0a0f;
   --bg-card: rgba(10, 10, 15, 0.65);
   --bg-blur: blur(16px);
-  --border-glow: rgba(79, 216, 232, 0.35);
-  --border-dim: rgba(79, 216, 232, 0.15);
+  --border-glow: #000000;
+  --border-dim: #000000;
   --text-main: #e2f3ff;
   --text-dim: #7f9bb3;
   --font-hud: 'Orbitron', sans-serif;
   --font-mono: 'Share Tech Mono', monospace;
   --font-ui: 'Space Grotesk', sans-serif;
-  --shadow-glow: 0 0 15px rgba(79, 216, 232, 0.25);
+  --shadow-glow: none;
   --transition-fast: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
   --transition-normal: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }

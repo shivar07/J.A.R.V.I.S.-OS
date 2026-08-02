@@ -15,12 +15,12 @@
 
 .jarvis-prompt-box {
   background: rgba(15, 23, 42, 0.9);
-  border: 2px solid #4fd8e8;
+  border: 2px solid #000000;
   border-radius: 12px;
   width: 90%;
   max-width: 380px;
   padding: 24px;
-  box-shadow: 0 0 35px rgba(79, 216, 232, 0.35), inset 0 0 15px rgba(79, 216, 232, 0.15);
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.95);
   text-align: center;
   animation: prompt-pulse-in 0.3s cubic-bezier(0.19, 1, 0.22, 1);
 }
@@ -66,9 +66,9 @@
 }
 
 .jarvis-prompt-btn {
-  background: rgba(79, 216, 232, 0.08);
-  border: 1.5px solid #4fd8e8;
-  color: #4fd8e8;
+  background: rgba(var(--primary-rgb), 0.08);
+  border: 1.5px solid var(--primary);
+  color: var(--primary);
   border-radius: 6px;
   padding: 10px 18px;
   font-family: var(--font-ui);
@@ -80,13 +80,14 @@
 }
 
 .jarvis-prompt-btn.yes {
-  background: #4fd8e8;
-  color: #0f172a;
+  background: var(--primary);
+  color: #000000;
 }
 
 .jarvis-prompt-btn.yes:hover {
-  background: #33b3c4;
-  box-shadow: 0 0 15px rgba(79, 216, 232, 0.5);
+  background: var(--primary);
+  opacity: 0.95;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
 }
 
 .jarvis-prompt-btn.no:hover {
