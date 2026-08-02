@@ -1,46 +1,4 @@
 document.addEventListener("DOMContentLoaded", () => {
-  // Inject HTML layout components
-  const sc = window.secureComponents || {};
-  
-  const desktopArea = document.getElementById("desktop-area");
-  if (desktopArea) {
-    desktopArea.innerHTML = sc.desktopBase || "";
-  }
-  
-  const iconsContainer = document.getElementById("desktop-icons-placeholder");
-  if (iconsContainer) {
-    iconsContainer.innerHTML = sc.desktopIcons || "";
-  }
-  
-  const startMenuPlaceholder = document.getElementById("start-menu-placeholder");
-  if (startMenuPlaceholder) {
-    startMenuPlaceholder.outerHTML = sc.startMenu || "";
-  }
-  
-  const windowsContainer = document.getElementById("windows-container");
-  if (windowsContainer) {
-    windowsContainer.innerHTML = 
-      (sc.win_jarvis || "") +
-      (sc.win_youtube || "") +
-      (sc.win_browser || "") +
-      (sc.win_tasks || "") +
-      (sc.win_terminal || "") +
-      (sc.win_settings || "") +
-      (sc.win_weather || "") +
-      (sc.win_music || "") +
-      (sc.win_showcase || "") +
-      (sc.win_gallery || "") +
-      (sc.win_socials || "") +
-      (sc.win_calculator || "") +
-      (sc.win_hackatime_stats || "") +
-      (sc.win_hackatime_leaderboard || "");
-  }
-  
-  const secureInjectedContainer = document.getElementById("secure-injected-container");
-  if (secureInjectedContainer) {
-    secureInjectedContainer.innerHTML = (sc.screens || "") + (sc.flyouts || "");
-  }
-
   const savedTheme = localStorage.getItem("system-theme") || "cyan";
   document.body.setAttribute("data-theme", savedTheme);
 
